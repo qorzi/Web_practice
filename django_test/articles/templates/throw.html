@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    <h2>Throw에 옴</h2>
+
+    <form action="/catch/" method="GET">
+        <label for="link">입력</label>
+        <input type="text" id='link' name='message'>
+        <input type="submit" value='전송'>
+        <button>버튼</button>
+    </form>
+
+{% endblock content %}
