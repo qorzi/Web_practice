@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% block content %}
+  <h1>여기는 인덱스</h1>
+  <hr>
+  {% for user in users %}
+  <p>{{user.username}}</p>
+  <hr>
+  {% endfor %}
+{% endblock content %}
