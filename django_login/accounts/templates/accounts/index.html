@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>여기는 인덱스 페이지입니다.</h2>
+<hr>
+<b>유저 목록</b>
+{% for user in users %}
+    <p>유저 {{user.pk}} : {{user.username}}</p>
+    <hr>
+{% endfor %}
+{% endblock content %}
