@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <h2>자동 카운터 => 10까지</h2>
+  <p class="p2">0</p>
+  <hr>
+
+  <script>
+    // 자동 카운터
+    const pTag2 = document.querySelector('.p2')
+    const autoPlus = function () {
+      // 10 전에는 하나씩 카운트
+      let autoCnt = parseInt(pTag2.innerText)
+      // 10이 되면 종료
+      if (autoCnt <= 9) {
+        autoCnt++
+        pTag2.innerText = autoCnt
+      } else {
+        clearInterval(timeInterval)
+      }
+    }
+    // 매크로 설정
+    // let timeInterval = setInterval(실행하고 싶은 함수, 몇초마다(1000(ms) => 1초))
+    let timeInterval = setInterval(autoPlus, 1000)
+  </script>
+</body>
+</html>
