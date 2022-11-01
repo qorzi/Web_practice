@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <div class="app">
+    <p>성 입력 : {{ lastName }}</p>
+    <input type="text" @input="onInput">
+    <p>이름 입력 : {{ firstName }}</p>
+    <input type="text" v-model="firstName">
+    <p>methods 결과 : {{ getFullName() }}</p>
+    <p>computed 결과 : {{ combined }}</p>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <script>
+    const app = new Vue({
+      el: '.app',
+      data: {
+        lastName: null,
+        firstName: '',
+      },
+      methods: {
+        onInput(event) {
+          this.lastName = event.target.value
+        },
+        getFullName() {
+          return this.lastName + this.firstName
+        }
+      },
+      computed: {
+        combined() {
+          return this.lastName + this.firstName
+        }
+      },
+      watch: {
+        firstName: function () {
+          console.log('firstName 변경')
+        }
+      }
+    })
+  </script>
+</body>
+</html>
