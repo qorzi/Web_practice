@@ -1,9 +1,11 @@
 <template>
   <div id="app">
-    <h3>My first youtube project</h3>
-    <TheSearchBar/>
-    <VideoDetail/>
-    <VideoList/>
+    <h2>My first youtube project</h2>
+    <br>
+    <TheSearchBar @items="getItem"/>
+    <br>
+    <VideoDetail :item="item"/>
+    <VideoList :all-items="allItems" @select-item="selectItem"/>
   </div>
 </template>
 
@@ -12,15 +14,29 @@ import TheSearchBar from '@/components/TheSearchBar'
 import VideoDetail from '@/components/VideoDetail'
 import VideoList from '@/components/VideoList'
 
-
-
 export default {
   name: 'App',
   components: {
     TheSearchBar,
     VideoDetail,
     VideoList,
-  }
+  },
+  data() {
+    return {
+      item: null,
+      allItems: null,
+    }
+  },
+  methods: {
+    getItem(items) {
+      console.log(items)
+      this.allItems = items
+    },
+    selectItem(item) {
+      console.log(item)
+      this.item = item
+    }
+  },
 }
 </script>
 
