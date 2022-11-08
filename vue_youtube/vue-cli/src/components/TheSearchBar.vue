@@ -21,7 +21,7 @@ export default {
         method: 'get',
         url: 'https://www.googleapis.com/youtube/v3/search',
         params: {
-        key: 'AIzaSyBLBoxqrzmrl46iY6xRCriDL597jFIni_Y',
+        key: 'here',
         part: 'snippet',
         type: 'video',
         q: word,
