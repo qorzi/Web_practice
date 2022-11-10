@@ -1,0 +1,16 @@
+
+.box {
+  text-align: center;
+  border: 1px solid black;
+  width: 100px;
+  height: 100px;
+
+  &_child {
+    border: 1px dotted red;
+    width: 50px;
+
+    &_list_item {
+      color: $my-red;
+    }
+  }
+}
