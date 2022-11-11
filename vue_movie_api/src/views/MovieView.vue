@@ -1,6 +1,6 @@
 <template>
   <div>
-    <button @click="getTopRateMovies">가져와~</button>
+    <!-- <button @click="getTopRateMovies">가져와~</button> -->
     <div class="view">
       <MovieCard 
       v-for="movie of movies"
@@ -52,7 +52,7 @@ export default {
     }
   },
   mounted() {
-    
+    this.getTopRateMovies()
   }
 }
 </script>

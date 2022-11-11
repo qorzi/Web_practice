@@ -1,10 +1,12 @@
 <template>
   <div class="center">
-    <button @click="pick">PICK</button>
-    
-    <div class="box" v-if="movie">
-      <img class="poster" :src=posterUrl alt="포스터">
-      <h4>{{movie.title}}</h4>
+    <div>
+      <button @click="pick">PICK</button>
+      
+      <div class="box" v-if="movie">
+        <img class="poster" :src=posterUrl alt="포스터">
+        <h4>{{movie.title}}</h4>
+      </div>
     </div>
   </div>
 </template>
@@ -37,6 +39,7 @@ export default {
 
 <style>
 .center {
+  display: flex;
   width: 100vw;
   justify-content: center;
   text-align: center;
