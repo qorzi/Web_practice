@@ -1,0 +1,87 @@
+.article-box {
+  margin: 0 auto;
+  padding: 10px 10px;
+}
+
+.header-box {
+  height: 50px;
+  border: 1px solid rgba(197, 197, 197, 0.699);
+  &_text {
+    margin-top: 10px;
+    padding-left: 10px;
+  }
+  span {
+    position: relative;
+    top: -28px;
+    right: 10px;
+    &:hover {
+      cursor: pointer;
+    }
+  }
+}
+
+.article-item {
+  border-top: 1px solid;
+  border-left: 1px solid;
+  border-right: 1px solid;
+  border-color: rgba(197, 197, 197, 0.699);
+  padding: 10px;
+  
+  &:nth-last-child(1) {
+    border-bottom: 1px solid rgba(197, 197, 197, 0.699);
+  }
+  
+  &:hover {
+    background-color: rgba(226, 226, 226, 0.63);
+    cursor: pointer;
+    
+  }
+
+  &_title {
+    font-size: 14px;
+    margin: 5px;
+  }
+  
+  &_content {
+    color: rgb(75, 75, 75);
+    font-size: 11px;
+    margin-left: 5px;
+
+  }
+
+  &_time {
+    display: inline;
+    color: rgb(75, 75, 75);
+    font-size: 9px;
+    margin-left: 5px;
+  }
+
+  &_username {
+    display: inline;
+    font-size: 9px;
+    margin-left: 5px;
+  }
+
+  span {
+    font-size: 12px;
+  }
+}
+
+.thumb {
+  font-size: 12px;
+  font-weight: 800;
+  color: rgb(231, 58, 58);
+}
+
+.chat {
+  font-size: 12px;
+  font-weight: 800;
+  color: rgb(3, 221, 148);
+}
+
+.hr {
+  border-color:rgba(197, 197, 197, 0);
+  margin: 0;
+  padding: 1px;
+}
+
