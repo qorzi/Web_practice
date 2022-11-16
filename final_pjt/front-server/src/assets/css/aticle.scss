@@ -1,6 +1,10 @@
 .article-box {
   margin: 0 auto;
   padding: 10px 10px;
+  width: 700px;
+  @media screen and (max-width: 720px) {
+    width: 92%;
+  }
 }
 
 .header-box {
@@ -62,8 +66,11 @@
     margin-left: 5px;
   }
 
-  span {
-    font-size: 12px;
+  &_icon {
+    height: 3px;
+    position: relative;
+    text-align: right;
+    top: -10px;
   }
 }
 
@@ -71,12 +78,14 @@
   font-size: 12px;
   font-weight: 800;
   color: rgb(231, 58, 58);
+  padding: 2px 2px;
 }
 
 .chat {
   font-size: 12px;
   font-weight: 800;
   color: rgb(3, 221, 148);
+  padding: 2px 2px;
 }
 
 .hr {

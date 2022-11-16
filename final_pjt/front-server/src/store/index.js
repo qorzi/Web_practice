@@ -2,10 +2,8 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import axios from 'axios'
 import createPersistedState from 'vuex-persistedstate'
-import router from '@/router'
 
 Vue.use(Vuex)
-
 
 const API_URL = 'http://127.0.0.1:8000'
 
@@ -15,6 +13,7 @@ export default new Vuex.Store({
     createPersistedState()
   ],
   state: {
+    movies : [],
     articles: [],
     token: null,
     isModalLogin: false,
@@ -25,18 +24,24 @@ export default new Vuex.Store({
     }
   },
   mutations: {
+    GET_MOVIES(state, movies) {
+      state.movies = movies
+    },
     GET_ARTICLES(state, articles) {
-      state.articles = articles
+      state.articles = articles.reverse()
     },
     // 회원가입 && 로그인
+      // 세션 스토리지에 토큰 저장
     SAVE_TOKEN(state, token) {
+      // sessionStorage.setItem('token', token)
       state.isModalLogin = false
       state.token = token
-      router.push({ name: 'ArticleView' })
     },
     DELETE_TOKEN(state) {
+      // 세션 스토리지에 토큰 삭제 
+      // sessionStorage.removeItem('token')
       state.token = null
-      router.push({ name: 'LogInView'})
+      // router.push({ name: 'LogInView'})
     },
     CLOSE_MODAL(state) {
       state.isModalLogin = false
@@ -46,6 +51,9 @@ export default new Vuex.Store({
     },
   },
   actions: {
+    getMovies(context, movies) {
+      context.commit('GET_MOVIES', movies)
+    },
     getArticles(context) {
       axios({
         method: 'get',
