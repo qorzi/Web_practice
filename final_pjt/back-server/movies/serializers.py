@@ -1,5 +1,6 @@
 from rest_framework import serializers
-from .models import Movie, Genre, Grade
+from .models import Movie
+# from .models import Movie, Genre, Grade
 
 
 class MovieSerializer(serializers.ModelSerializer):
@@ -9,20 +10,20 @@ class MovieSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class MovieDetailSerializer(serializers.ModelSerializer):
-    class GenreSerializer(serializers.ModelSerializer):
-        class Meta:
-            model = Genre
-            fields = ('name',)
+# class MovieDetailSerializer(serializers.ModelSerializer):
+#     class GenreSerializer(serializers.ModelSerializer):
+#         class Meta:
+#             model = Genre
+#             fields = ('name',)
 
-    genres = GenreSerializer(many=True, read_only=True)
+#     genres = GenreSerializer(many=True, read_only=True)
 
-    class Meta:
-        model = Movie
-        fields = '__all__'
+#     class Meta:
+#         model = Movie
+#         fields = '__all__'
 
-class GradeSerializer(serializers.ModelSerializer):
+# class GradeSerializer(serializers.ModelSerializer):
 
-    class Meta:
-        model = Grade
-        fields = '__all__'
+#     class Meta:
+#         model = Grade
+#         fields = '__all__'
