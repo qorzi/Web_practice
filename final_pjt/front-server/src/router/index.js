@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+import MovieView from '@/views/MovieView'
 import ArticleView from '@/views/ArticleView'
 import CreateView from '@/views/CreateView'
 import DetailView from '@/views/DetailView'
@@ -8,12 +9,16 @@ import SignUpView from '@/views/SignUpView'
 import UserView from '@/views/UserView'
 import TestHome from '@/views/TestHome'
 
-
 Vue.use(VueRouter)
 
 const routes = [
   {
     path: '/',
+    name: 'movies',
+    component: MovieView
+  },
+  {
+    path: '/home',
     name: 'TestHome',
     component: TestHome
   },

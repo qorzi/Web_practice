@@ -4,10 +4,12 @@
     <p class="article-item_content">{{ article.content }}</p>
     <p class="article-item_time">{{ displayedAt }}</p>
     <p class="article-item_username">익명</p>
-    <span class="material-symbols-outlined thumb">thumb_up</span>
-    <span class="thumb">0</span>
-    <span class="material-symbols-outlined chat">chat_bubble</span>
-    <span class="chat">0</span>
+    <div class="article-item_icon">
+      <span class="material-symbols-outlined thumb">thumb_up</span>
+      <span class="thumb">0</span>
+      <span class="material-symbols-outlined chat p-l">chat_bubble</span>
+      <span class="chat">0</span>
+    </div>
   </div>
 </template>
 
@@ -40,7 +42,7 @@ export default {
       if (months < 12) return `${Math.floor(months)}개월 전`
       const years = days / 365
       return `${Math.floor(years)}년 전`
-}
+    }
   }
 }
 </script>
