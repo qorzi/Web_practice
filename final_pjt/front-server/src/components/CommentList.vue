@@ -2,9 +2,10 @@
   <div>
     <div>
       <CommentListItem
-      v-for="comment in Comments"
+      v-for="comment in article.comment_set"
       :key="comment.id"
       :comment="comment"
+      @delete-comment="deleteComment"
       />
     </div>
     <div class="comment-input-box">
@@ -32,16 +33,7 @@ export default {
   },
   data() {
     return {
-      isComment: null,
       currnetComment: null,
-    }
-  },
-  created() {
-    // console.log(this.article)
-  },
-  computed: {
-    Comments() {
-      return this.article.comment_set
     }
   },
   methods: {
@@ -56,18 +48,21 @@ export default {
         headers: {
           Authorization: `Token ${this.$store.state.token}`
         }
-        
       })
         .then((res) => {
           console.log(res)
           this.currnetComment = null
           // this.$router.replace({ name: 'DetailView', params: { id: this.$route.params.id } })
-          location.reload()
+          // location.reload()
         })
         .catch((err) => {
           console.log(err)
         })
+      this.$emit('create-comment')
     },
+    deleteComment() {
+      this.$emit('delete-comment')
+    }
   },
 }
 </script>

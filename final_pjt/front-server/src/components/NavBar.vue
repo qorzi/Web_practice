@@ -13,17 +13,19 @@
     <div class="nav__right">
       <!-- <!— search input -> -->
       <div class="nav__right__search">
-        <input type="text" placeholder="검색" />
+        <input type="text" placeholder="검색" v-model="searchText" @keyup.enter="searchMovie"/>
       </div>
-      <div v-if="!isLogin" class="nav__right__login" @click="openModal">로그인</div>
+      <div v-if="!isLogin" class="nav__right__login" @click="openLogin">로그인</div>
       <div v-else class="nav__right__login" @click="logOut">로그아웃</div>
-      <div v-if="!isLogin" class="nav__right__signup" @click="signUp">회원가입</div>
+      <div v-if="!isLogin" class="nav__right__signup" @click="openSignup">회원가입</div>
       <div v-else class="nav__right__signup" @click="profile">프로필</div>
     </div>
   </nav>
 </template>
 
 <script>
+
+
 export default {
   name: 'NavBar',
   data() {
@@ -39,28 +41,34 @@ export default {
         },
         {
           name: "영화관 찾기",
-          link: "/",
+          link: "/map",
         },
         // {
         //   name: "메뉴",
         //   link: "/",
         // },
       ],
+      searchText: null,
     }
   },
   methods: {
-    signUp() {
-      this.$router.push({ name: 'SignUpView' })
+    openLogin() {
+      this.$store.commit('OPEN_LOGIN')
     },
-    openModal() {
-      this.$store.commit('OPEN_MODAL')
+    openSignup() {
+      this.$store.commit('OPEN_SIGNUP')
     },
     logOut() {
       this.$store.commit('DELETE_TOKEN')
     },
     profile() {
       this.$router.push({ name: 'UserView' })
-    }
+    },
+    searchMovie() {
+      this.$router.push({ name: 'TestHome' })
+      this.$store.commit('CLOSE_SEARCH')
+      this.$store.dispatch('searchMovie', this.searchText)
+    },
   },
   computed: {
     isLogin() {

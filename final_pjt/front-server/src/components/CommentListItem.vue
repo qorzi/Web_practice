@@ -53,7 +53,7 @@ export default {
         }
       })
         .then(() => {
-          location.reload()
+          this.$emit('delete-comment')
         })
     }
   }

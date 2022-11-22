@@ -1,6 +1,7 @@
 .article-box {
   margin: 0 auto;
   padding: 10px 10px;
+  padding-top: 50px;
   width: 700px;
   @media screen and (max-width: 720px) {
     width: 92%;
@@ -36,7 +37,7 @@
   }
   
   &:hover {
-    background-color: rgba(226, 226, 226, 0.63);
+    background-color: $gray-basic;
     cursor: pointer;
     
   }
@@ -237,7 +238,7 @@
 .create-btn {
   width: 50px;
   height: 100%;
-  background-color: rgb(202, 201, 201);
+  background-color: $hover-color;
   display: flex;
   align-items: center;
   justify-content: center;

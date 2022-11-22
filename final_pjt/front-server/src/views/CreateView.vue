@@ -1,15 +1,34 @@
 <!-- views/CreateView.vue -->
-
 <template>
   <div>
-    <h1>게시글 작성</h1>
-    <form @submit.prevent="createArticle">
-      <label for="title">제목 : </label>
-      <input type="text" id="title" v-model.trim="title"><br>
-      <label for="content">내용 : </label>
-      <textarea id="content" cols="30" rows="10" v-model="content"></textarea><br>
-      <input type="submit" id="submit">
-    </form>
+    <div class="article-box">
+      <div class="header-box">
+        <h2 class="header-box_text">게시글 작성</h2>
+      </div>
+      
+      <form @submit.prevent="createArticle">
+        <div class="create-input-box">
+          <input type="text" id="title" placeholder="제목을 입력해주세요" v-model.trim="title"><br>
+        </div>
+        <div class="create-input-box">
+          <textarea id="text" placeholder="내용을 입력해주세요" v-model="content"></textarea>
+        </div>
+        <div class="create-input-box">
+          <input type="submit" id="submit" value="작성" class="create-input-box_btn">
+        </div>
+      </form>
+      <div class="box-btn">
+      <div class="btn-d_box" @click="goArticleView">
+        <span class="material-symbols-outlined btn-d_icon">list</span>
+        <button class="btn-d">목록</button>
+      </div>
+      <div class="btn-d_box" @click="deleteContent" style="width: 75px;">
+        <span class="material-symbols-outlined btn-d_icon">delete</span>
+        <button class="btn-d">지우기</button>
+      </div>
+    </div>
+    </div>
+    
   </div>
 </template>
 
@@ -56,6 +75,13 @@ export default {
         .catch((err) => {
           console.log(err)
         })
+    },
+    goArticleView() {
+      this.$router.push({ name: 'ArticleView' })
+    },
+    deleteContent() {
+      this.title = null
+      this.content = null
     }
   }
 }

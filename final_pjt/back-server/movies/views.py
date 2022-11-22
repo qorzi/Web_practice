@@ -1,86 +1,116 @@
-from django.shortcuts import render, redirect, get_list_or_404, get_object_or_404
-from .models import Movie, Genre, Grade
-from rest_framework.decorators import api_view
+from datetime import date
+from django.http import JsonResponse
+from django.db.models import Count
+from django.shortcuts import get_object_or_404
+from django.contrib.auth import get_user_model
+from .models import *
+from .serializers.movie import *
+# from .serializers.rate import *
 from rest_framework import status
+from rest_framework.permissions import *
 from rest_framework.response import Response
-from .serializers import MovieSerializer, GradeSerializer
+from rest_framework.decorators import api_view, permission_classes
+
+movies = Movie.objects.annotate(
+    like_movie_users_count = Count('like_movie_users', distinct=True),) # 좋아요한 사용자 수
+
 # Create your views here.
 
-# 영화 추가 삭제 수정
-@api_view(['POST', 'DELETE', 'PUT'])
-def movies(request, movie_pk):
-    movie = get_object_or_404(Movie, pk=movie_pk)
-
-    if request.method == 'POST':
-        serializer = MovieSerializer(data=request.data)
-        if serializer.is_valid(raise_exception=True):
-            # serializer.save()
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-    
-    elif request.method == 'DELETE':
-        movie.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
-
-    elif request.method == 'PUT':
-        serializer = MovieSerializer(movie, data=request.data)
-        if serializer.is_valid(raise_exception=True):
-            serializer.save()
-            return Response(serializer.data)
-
-#영화 저장
-@api_view(['POST'])
-def movies_save(request):
-    if request.method == 'POST':
-        serializer = MovieSerializer(data=request.data)
-        if serializer.is_valid(raise_exception=True):
-            # serializer.save()
-            serializer.save(user=request.user)
-    return Response(status=status.HTTP_202_ACCEPTED)
-
-# 평점 추가 변경
-@api_view(['POST', 'PUT'])
-def movies_grade(request, grade_pk):
-    grade = get_object_or_404(Grade, pk=grade_pk)
-
-    # 구현 미완료
-    if request.method == 'POST':
-        grade.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
-
-    elif request.method == 'PUT':
-        serializer = GradeSerializer(grade, data=request.data)
-        if serializer.is_valid(raise_exception=True):
-            serializer.save()
-            return Response(serializer.data)
-
-# 영화 좋아요 리스트 및 좋아요
-@api_view(['GET', 'POST'])
-def movies_like(request):
-
-    if request.method == 'GET':
-        user = request.user
-        movies = user.like_movies.all()
-        serializer = MovieSerializer(movies, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
-
-    elif request.method == 'POST':
-        movie_pk = request.data.get('movieId')
-        movie = get_object_or_404(Movie, pk=movie_pk)
-
-        if movie.like_users.filter(pk=request.user.pk).exists():
-            movie.like_users.remove(request.user)
-        else:
-            movie.like_users.add(request.user)
-        return Response(status=status.HTTP_202_ACCEPTED)
-
-
-# 사용자 기반 영화 추천
+# 전체 영화 조회(메인)
+# 인증 안해도 조회만 가능
 @api_view(['GET'])
-def recommend(request):
+@permission_classes([IsAuthenticatedOrReadOnly]) # 인증된 사용자는 모든 요청 가능, 인증되지 않은 사용자는 GET만 가능
+def movies_main(request):
+    # 인기 높은 순서로 정렬, 관객 수 높은 순으로 정렬
+    # 정렬기준에 따라 쿼리문 수정하여 정렬 가능!!
+    main_movies = movies.filter(release_date__lte=date.today()).order_by('-release_date','-vote_average')[:30]
+    serializer = MovieListSerializer(main_movies, many=True)
+    print(main_movies)
+    return Response(serializer.data)
+
+# 필터링된 영화 정보
+@api_view(['GET'])
+@permission_classes([IsAuthenticatedOrReadOnly]) # 인증된 사용자는 모든 요청 가능, 인증되지 않은 사용자는 GET만 가능
+def movie_sort(request, sort_num):
+    if sort_num == 1: # 관객수(popularity)
+        sort_movies = movies.order_by('-popularity')[:30]
+    elif sort_num == 2: # 최신순(개봉한 영화만)
+        sort_movies = movies.filter(release_date__lte=date.today()).order_by('-release_date')[:30]
+    elif sort_num == 3: # 개봉예정작 : 빠른 개봉 순으로
+        sort_movies = movies.filter(release_date__gt=date.today()).order_by('release_date')[:30]
+    elif sort_num == 4: # 리뷰 많은 순(개봉한 영화만), 최신순
+        sort_movies = movies.filter(release_date__lte=date.today()).order_by('-review_movie_count', '-release_date')[:30]
+    elif sort_num == 5: # 평점순(vote_average/개봉한 영화)
+        sort_movies = movies.filter(release_date__lte=date.today()).order_by('-vote_average') [:30] 
+    # 장르 포함
+    elif sort_num == 12: # 모험
+        sort_movies = movies.filter(genre_check=12).order_by('-release_date')[:30]
+    elif sort_num == 14: # 판타지
+        sort_movies = movies.filter(genre_check=14).order_by('-release_date')[:30]
+    elif sort_num == 16: # 애니메이션
+        sort_movies = movies.filter(genre_check=16).order_by('-release_date')[:30]
+    elif sort_num == 18: # 드라마
+        sort_movies = movies.filter(genre_check=18).order_by('-release_date')[:30]
+    elif sort_num == 27: # 공포
+        sort_movies = movies.filter(genre_check=27).order_by('-release_date')[:30]
+    elif sort_num == 28: # 액션
+        sort_movies = movies.filter(genre_check=28).order_by('-release_date')[:30]
+    elif sort_num == 35: # 코미디
+        sort_movies = movies.filter(genre_check=35).order_by('-release_date')[:30]
+    elif sort_num == 36: # 역사
+        sort_movies = movies.filter(genre_check=36).order_by('-release_date')[:30]
+    elif sort_num == 37: # 서부
+        sort_movies = movies.filter(genre_check=37).order_by('-release_date')[:30]
+    elif sort_num == 53: # 스릴러
+        sort_movies = movies.filter(genre_check=53).order_by('-release_date')[:30]
+    elif sort_num == 80: # 범죄
+        sort_movies = movies.filter(genre_check=80).order_by('-release_date')[:30]
+    elif sort_num == 99: #다큐멘터리
+        sort_movies = movies.filter(genre_check=99).order_by('-release_date')[:30]
+    elif sort_num == 878: # SF
+        sort_movies = movies.filter(genre_check=878).order_by('-release_date')[:30]
+    elif sort_num == 9648: # 미스터리
+        sort_movies = movies.filter(genre_check=9648).order_by('-release_date')[:30]
+    elif sort_num == 10402: # 음악
+        sort_movies = movies.filter(genre_check=10402).order_by('-release_date')[:30]
+    elif sort_num == 10749: # 로맨스
+        sort_movies = movies.filter(genre_check=10749).order_by('-release_date')[:30]
+    elif sort_num == 10751: # 가족
+        sort_movies = movies.filter(genre_check=10751).order_by('-release_date')[:30]
+    elif sort_num == 10752: # 전쟁
+        sort_movies = movies.filter(genre_check=10752).order_by('-release_date')[:30]
+    elif sort_num == 10770: # TV 영화
+        sort_movies = movies.filter(genre_check=10770).order_by('-release_date')[:30]
+    serializer = MovieListSerializer(sort_movies, many=True)
+    return Response(serializer.data)
+
+# 단일 영화 조회
+# 인증안해도 조회만 가능
+@api_view(['GET'])
+@permission_classes([IsAuthenticatedOrReadOnly]) # 인증된 사용자는 모든 요청 가능, 인증되지 않은 사용자는 GET만 가능
+def movie_detail(request, movie_pk):
+    movie = movies.get(pk=movie_pk)
+    serializer = MovieListSerializer(movie)
+    return Response(serializer.data)
+
+# 영화 좋아요 등록 및 해제(좋아요 수까지 출력)
+@api_view(['POST'])
+@permission_classes([IsAuthenticated]) # 인증된 사용자만 권한 허용
+def movie_like(request, movie_pk):
+    movie = get_object_or_404(Movie, pk=movie_pk)
     user = request.user
+    # 해제
+    if movie.like_movie_users.filter(pk=user.pk).exists():
+        movie.like_movie_users.remove(user)
+    # 등록
+    else:
+        movie.like_movie_users.add(user)
 
-    # serializer = 
-    # return Response(serializer.data, status=status.HTTP_200_OK)
-    return
+    serializer = MovieLikeSerialzer(movie)
 
+    like_movie_register = {
+        'id' : serializer.data.get('id'),
+        'like_movie_users_count' : movie.like_movie_users.count(),
+        'like_movie_users' : serializer.data.get('like_movie_users'),
+    }
+    return JsonResponse(like_movie_register)

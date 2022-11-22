@@ -26,18 +26,20 @@
       </div>
     </div>
     <div>
-      <button class="btn kakao">카카오톡으로 로그인</button>
+      <button class="btn kakao" @click="kakaoLoginBtn">카카오톡으로 로그인</button>
     </div>
     <div>
-      <button class="btn other" @click="signUp">계정 생성</button>
+      <button class="btn other" @click="openSignup">계정 생성</button>
     </div>
     <div class="tip">
-      <p class="tip_text"> TIP. 아직 계정이 없으신가요? 저희는 소셜로그인이 가능해요.</p>
+      <p class="tip_text"> TIP. 아직 계정이 없으신가요? 저희는 소셜로그인이 가능해요. 아마도</p>
     </div>
   </div>
 </template>
 
+<script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
 <script>
+
 export default {
   name: 'LogInView',
   data() {
@@ -57,11 +59,48 @@ export default {
       }
       this.$store.dispatch('logIn', payload)
     },
-    kakao() {
-
+    openSignup() {
+      this.$store.commit('OPEN_SIGNUP')
     },
-    signUp() {
-      this.$router.push({ name: 'SignUpView' })
+    
+    // 카카오 로그인
+    kakaoLoginBtn() {
+
+      window.Kakao.init(process.env.VUE_APP_KAKAOMAP_API_KEY) // Kakao Developers에서 요약 정보 -> JavaScript 키
+      // 로그인 세션 제거
+      if (window.Kakao.Auth.getAccessToken()) {
+        window.Kakao.API.request({
+          url: '/v1/user/unlink',
+          success: function (response) {
+            console.log(response)
+          },
+          fail: function (error) {
+            console.log(error)
+          },
+        })
+        window.Kakao.Auth.setAccessToken(undefined)
+      }
+
+      // 로그인 시도
+      window.Kakao.Auth.login({
+        success: function () {
+          window.Kakao.API.request({
+            url: '/v2/user/me',
+            data: {
+              property_keys: ["kakao_account.email"]
+            },
+            success: async function (response) {
+              console.log(response);
+            },
+            fail: function (error) {
+              console.log(error)
+            },
+          })
+        },
+        fail: function (error) {
+          console.log(error)
+        },
+      })
     }
   }
 }

@@ -1,17 +1,11 @@
-from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 from django.urls import path
 from . import views
 
-
+app_name = 'movies'
 urlpatterns = [
-    # 영화 추가 삭제 수정
-    path('movie/', views.movies),
-    # 평가한 영화, 좋아요한 영화 저장
-    path('save/', views.movies_save),
-    # 영화 평점 저장 및 불러오기
-    path('grade/', views.movies_grade),
-    # 영화 좋아요 리스트 및 좋아요
-    path('like/', views.movies_like),
-    # 사용자 기반 영화 추천
-    # path('recommend/', views.recommend)
+    path('', views.movies_main), # 메인 영화 조회
+    path('<int:sort_num>/sort/', views.movie_sort), # 필터링된 영화 정보(장르 포함)
+    path('<int:movie_pk>/', views.movie_detail), # 단일 영화 조회
+    path('<int:movie_pk>/like/', views.movie_like), # 영화 좋아요 등록 및 해제(좋아요 수까지 출력)
+    # path('<int:genre_id>/genre/', views.movie_genre), # 장르별 추천 영화 조회
 ]

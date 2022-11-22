@@ -18,8 +18,6 @@ export default {
   },
   computed: {
     articles() {
-      // let articles = this.$store.state.articles
-      // articles = articles.reverse()
       return this.$store.state.articles
     }
   }

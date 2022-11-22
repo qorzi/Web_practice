@@ -42,7 +42,7 @@ export default {
       if (this.isLogin === true) { 
         this.$router.push({ name: "CreateView" })
       } else {
-        this.$store.commit('OPEN_MODAL')
+        this.$store.commit('OPEN_LOGIN')
       }
     }
   }

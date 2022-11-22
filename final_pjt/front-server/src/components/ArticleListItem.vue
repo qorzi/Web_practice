@@ -8,21 +8,52 @@
       <span class="material-symbols-outlined thumb">thumb_up</span>
       <span class="thumb">0</span>
       <span class="material-symbols-outlined chat p-l">chat_bubble</span>
-      <span class="chat">0</span>
+      <span class="chat">{{comment_cnt}}</span>
     </div>
   </div>
 </template>
 
 <script>
+import axios from 'axios'
+
+const API_URL = 'http://127.0.0.1:8000'
+
 export default {
   name: 'ArticleListItem',
   props: {
     article: Object,
   },
+  data() {
+    return {
+      comment_cnt: null,
+    }
+  },
+  created() {
+    this.getArticleDetail()
+  },
   methods: {
     goDetail() {
-      this.$router.push({ name: 'DetailView', params: { id: this.article.id } })
-    }
+      this.$router.push({ name: 'ArticleDetailView', params: { id: this.article.id } })
+    },
+    getArticleDetail() {
+      // console.log(`Token ${this.$store.state.token}`)
+      // console.log(`${API_URL}/api/v1/articles/${this.article.id}`)
+      axios({
+        method: 'get',
+        url: `${API_URL}/api/v1/articles/${this.article.id}`,
+        headers: {
+          Authorization: `Token ${this.$store.state.token}`
+        }
+      })
+        .then((res) => {
+          // console.log(res)
+          this.comment_cnt = res.data.comment_count
+          // console.log(this.comment_count)
+        })
+        .catch((err) => {
+          console.log(err)
+        })
+    },
   },
   computed: {
     displayedAt() {
@@ -42,7 +73,7 @@ export default {
       if (months < 12) return `${Math.floor(months)}개월 전`
       const years = days / 365
       return `${Math.floor(years)}년 전`
-    }
+    },
   }
 }
 </script>

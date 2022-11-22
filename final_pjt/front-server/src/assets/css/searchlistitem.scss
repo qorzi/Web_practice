@@ -1,0 +1,31 @@
+.sli-box {
+  &:hover {
+    cursor: pointer;
+  }
+  img {
+    width: 100%;
+    // height: 80%;
+    border-radius: 5px;
+    // @media screen and (max-width: 720px){
+    //   width: 90%;
+    // }
+  }
+
+  &_data {
+
+    &_in {
+      margin-left: 5px;
+      margin-right: 5px;
+    }
+
+    span {
+      color: $gray-txet;
+      font-size: 14px;
+    }
+
+  }
+  p:nth-last-child(1) {
+    color: $gray-txet;
+    font-size: 14px;
+  }
+}

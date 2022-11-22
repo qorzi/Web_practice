@@ -2,7 +2,10 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import axios from 'axios'
 import createPersistedState from 'vuex-persistedstate'
+// import router from '@/router'
+import VueGeolocation from 'vue-geolocation-api'
 
+Vue.use(VueGeolocation)
 Vue.use(Vuex)
 
 const API_URL = 'http://127.0.0.1:8000'
@@ -17,6 +20,11 @@ export default new Vuex.Store({
     articles: [],
     token: null,
     isModalLogin: false,
+    isSearch: false,
+    searchText: null,
+    searchMovies: null,
+    positionObj: {},
+    notSign: true,
   },
   getters: {
     isLogin(state) {
@@ -36,6 +44,7 @@ export default new Vuex.Store({
       // sessionStorage.setItem('token', token)
       state.isModalLogin = false
       state.token = token
+      // router.push({ name: 'Testhome'})
     },
     DELETE_TOKEN(state) {
       // 세션 스토리지에 토큰 삭제 
@@ -46,8 +55,25 @@ export default new Vuex.Store({
     CLOSE_MODAL(state) {
       state.isModalLogin = false
     },
-    OPEN_MODAL(state) {
+    OPEN_LOGIN(state) {
       state.isModalLogin = true
+      state.notSign = true
+    },
+    OPEN_SIGNUP(state) {
+      state.isModalLogin = true
+      state.notSign = false
+    },
+    OPEN_SEARCH(state, searchedMovies) {
+      state.searchMovies = searchedMovies
+      state.isSearch = true
+    },
+    CLOSE_SEARCH(state) {
+      state.isSearch = false
+      state.searchMovies = null
+    },
+    GETCURRENTSITE(state, position) {
+      state.positionObj = position
+      // console.log(state.positionObj)
     },
   },
   actions: {
@@ -72,24 +98,30 @@ export default new Vuex.Store({
         })
     },
     signUp(context, payload) {
+      // console.log(payload)
       axios({
         method: 'post',
-        url: `${API_URL}/accounts/signup/`,
+        url: `${API_URL}/account/signup/`,
         data: {
           username: payload.username,
           password1: payload.password1,
           password2: payload.password2,
+          nickname: payload.nickname
         }
       })
         .then((res) => {
           // console.log(res)
           context.commit('SAVE_TOKEN', res.data.key)
         })
+        .catch((err) => {
+          alert('잘못 입력했다!')
+          console.log(err)
+        })
     },
     logIn(context, payload) {
       axios({
         method: 'post',
-        url: `${API_URL}/accounts/login/`,
+        url: `${API_URL}/account/login/`,
         data: {
           username: payload.username,
           password: payload.password,
@@ -117,6 +149,36 @@ export default new Vuex.Store({
           console.log(err)
         })
     },
+    searchMovie(context, searchText) {
+      const API_KEY = process.env.VUE_APP_TMDB_API_KEY
+      const URL = 'https://api.themoviedb.org/3/search/movie'
+
+      axios({
+        method: "get",
+        url: URL,
+        params: {
+          api_key: API_KEY,
+          language: 'ko-KR',
+          query: searchText,
+          // page: '1',
+        }
+      })
+        .then((res) => {
+          // console.log(res.data.results)
+          context.state.searchText = searchText
+          const searchedMovies = res.data.results
+          context.commit("OPEN_SEARCH", searchedMovies)
+        })
+        .catch((err) => {
+          console.log(err)
+        })
+
+
+      // 가라용
+      // context.state.searchText = searchText
+      // context.commit("OPEN_SEARCH", searchText)
+    },
+    
     
   },
   modules: {
