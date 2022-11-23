@@ -11,6 +11,7 @@ from rest_framework import status
 from rest_framework.permissions import *
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
+# 랜덤 장르 담아오기
 # Kakao Login
 import os
 import requests
@@ -65,6 +66,7 @@ def user_movie_list(request, user_pk):
         'like_movies' : serializer.data.get('like_movies'),
     }
     return JsonResponse(user_list)
+
 
 # # Kakao Login
 # @api_view(['POST'])

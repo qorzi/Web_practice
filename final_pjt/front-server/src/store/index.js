@@ -9,7 +9,8 @@ Vue.use(VueGeolocation)
 Vue.use(Vuex)
 
 const API_URL = 'http://127.0.0.1:8000'
-
+const YOUTUBE_URL = 'https://www.googleapis.com/youtube/v3/search'
+const YOUTUBE_KEY = process.env.VUE_APP_YOUTUBE_API
 
 export default new Vuex.Store({
   plugins: [
@@ -17,7 +18,10 @@ export default new Vuex.Store({
   ],
   state: {
     movies : [],
+    movies2 : [],
+    movies3 : [],
     articles: [],
+    youtubeVideos: [],
     token: null,
     isModalLogin: false,
     isSearch: false,
@@ -25,15 +29,25 @@ export default new Vuex.Store({
     searchMovies: null,
     positionObj: {},
     notSign: true,
+    genreMovies: [],
+    badwordFilter: false,
+    username: null,
   },
+  
   getters: {
     isLogin(state) {
       return state.token ? true : false
-    }
+    },
   },
   mutations: {
     GET_MOVIES(state, movies) {
       state.movies = movies
+    },
+    GET_MOVIES2(state, movies2) {
+      state.movies2 = movies2
+    },
+    GET_MOVIES3(state, movies3) {
+      state.movies3 = movies3
     },
     GET_ARTICLES(state, articles) {
       state.articles = articles.reverse()
@@ -45,6 +59,8 @@ export default new Vuex.Store({
       state.isModalLogin = false
       state.token = token
       // router.push({ name: 'Testhome'})
+      // this.dispatch('getUserPro')
+      
     },
     DELETE_TOKEN(state) {
       // 세션 스토리지에 토큰 삭제 
@@ -75,10 +91,25 @@ export default new Vuex.Store({
       state.positionObj = position
       // console.log(state.positionObj)
     },
+    SEARCH_YOUTUBE: function (state, res) {
+      state.youtubeVideos = res.data.items
+    },
+    GET_GENRE_MOVIE(state, movies) {
+      state.genreMovies = movies
+    },
+    BADWORD_FILTER(state) {
+      state.badwordFilter = !state.badwordFilter
+    }
   },
   actions: {
     getMovies(context, movies) {
       context.commit('GET_MOVIES', movies)
+    },
+    getMovies2(context, movies2) {
+      context.commit('GET_MOVIES2', movies2)
+    },
+    getMovies3(context, movies3) {
+      context.commit('GET_MOVIES3', movies3)
     },
     getArticles(context) {
       axios({
@@ -119,6 +150,7 @@ export default new Vuex.Store({
         })
     },
     logIn(context, payload) {
+      const username = payload.username
       axios({
         method: 'post',
         url: `${API_URL}/account/login/`,
@@ -128,8 +160,26 @@ export default new Vuex.Store({
         }
       })
         .then((res) => {
-          // console.log(res)
+          console.log(res)
+          context.state.username = username 
           context.commit('SAVE_TOKEN', res.data.key)
+        })
+    },
+    getUserPro(context){
+      axios({
+        method: 'get',
+        url: `${API_URL}/account/user/`,
+        headers: {
+          Authorization: `Token ${context.state.token}`
+        }
+      })
+        .then((res) => {
+          // console.log(res, context)
+          console.log(res.data)
+          
+        })
+        .catch((err) => {
+          console.log(err)
         })
     },
     getUser(context) {
@@ -177,10 +227,35 @@ export default new Vuex.Store({
       // 가라용
       // context.state.searchText = searchText
       // context.commit("OPEN_SEARCH", searchText)
+      },
+      searchYoutube: function ({ commit }, searchText) {
+        const params = {
+          q: searchText+'movie',
+          key: YOUTUBE_KEY,
+          part: 'snippet',
+          type: 'video'
+        }
+        axios({
+          method: 'get',
+          url: YOUTUBE_URL,
+          params,
+        })
+        .then(res => {
+          // console.log(res.data.items)
+          commit('SEARCH_YOUTUBE', res)
+        })
+        .catch(err => console.log(err))
+      },  
+      // articleLike(context, articles) {
+      //   axios({
+      //     method: 'post',
+      //     url: `${API_URL}/api/v1/${articles.pk}/like/`,
+      //     headers: {
+      //       Authorization: `Token ${context.state.token}`
+      //     }
+      //   })
+      // }
     },
-    
-    
-  },
   modules: {
   }
 })

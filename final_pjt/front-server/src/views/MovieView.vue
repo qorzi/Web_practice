@@ -1,44 +1,78 @@
 <template>
-  <div class="moive_first">
-    <div class= "movie_subject">
-      <p class= "movie_subject_name">박스오피스 순위</p>
-    </div>
-    <div class="movie_second">
-      <div class="movie_third">
-        <div class="movie_fourth">
-          <div class="movie_fifth">
-            <div class="movie_sixth">
-                  <ul class="movie_list">
-              <swiper :options="swiperOption">
-                <swiper-slide
-                  v-for="movie in movies" 
-                  :key="movie.id">
-                  <MovieList :movie="movie"/>
-                </swiper-slide>
-              </swiper>
-                  </ul>
-            </div>
-          </div> 
-        </div>
+  <div>
+    <div class="moive_first">
+      <div class= "movie_subject">
+        <p class= "movie_subject_name">박스오피스 순위</p>
       </div>
+      <div class="movie_second">
+        <div class="movie_third">
+          <ul class="movie_list">
+            <swiper :options="swiperOption">
+              <swiper-slide
+                v-for="movie in movies" 
+                :key="movie.id">
+                <MovieList :movie="movie"/>
+              </swiper-slide>
+            </swiper>
+          </ul>
+        </div>
+      </div> 
+    </div>
+    <div class="moive_first">
+      <div class= "movie_subject">
+        <p class= "movie_subject_name">주간 트렌드 순위</p>
+      </div>
+      <div class="movie_second">
+        <div class="movie_third">
+          <ul class="movie_list">
+            <swiper :options="swiperOption">
+              <swiper-slide
+                v-for="movie2 in movies2" 
+                :key="movie2.id">
+                <MovieList2 :movie2="movie2"/>
+              </swiper-slide>
+            </swiper>
+          </ul>
+        </div>
+      </div> 
+    </div>
+    <div class="moive_first">
+      <div class= "movie_subject">
+        <p class= "movie_subject_name">장르 추천</p>
+      </div>
+      <div class="movie_second">
+        <div class="movie_third">
+          <ul class="movie_list">
+            <swiper :options="swiperOption">
+              <swiper-slide
+                v-for="movie3 in genreMovies" 
+                :key="movie3.id">
+                <MovieList3 :movie3="movie3"/>
+              </swiper-slide>
+            </swiper>
+          </ul>
+        </div>
+      </div> 
     </div>
   </div>
 </template>
 
 <script>
 import MovieList from '@/components/MovieList'
+import MovieList2 from '@/components/MovieList2'
+import MovieList3 from '@/components/MovieList3'
 import axios from 'axios'
-// import carousel from 'vue-owl-carousel'
-// import 'swiper/dist/css/swiper.css'
 import "swiper/css/swiper.css";
 import { Swiper, SwiperSlide } from 'vue-awesome-swiper'
 export default {
   data() {
       return {
         swiperOption: {
+          autoHeight: true,
           slidesPerView: 3,
-          centeredSlides: false,
-          spaceBetween: 1,
+          spaceBetween: 10,
+          slidesPerGroup: 3,
+          loop: false, 
           pagination: {
             el: '.swiper-pagination',
             clickable: true
@@ -49,19 +83,22 @@ export default {
           },
           breakpoints: {
           '@0.75': {
-            slidesPerView: 4
+            slidesPerView: 5,
+            slidesPerGroup: 5,
           },
           '@1.20': {
-            slidesPerView: 5
+            slidesPerView: 6,
+            slidesPerGroup: 6,
           }
-          },
-          swiperSlides: [1, 2, 3, 4, 5]
-          }
-        }
-      },
+        },
+      }
+    }
+  },
   name: 'MovieView', 
   components: {
     MovieList, 
+    MovieList2,   
+    MovieList3,   
     Swiper,
     SwiperSlide
   },
@@ -69,10 +106,21 @@ export default {
     movies() {
       return this.$store.state.movies
     },
+    movies2() {
+      return this.$store.state.movies2
+    },
+    movies3() {
+      return this.$store.state.movies3
+    },
+    genreMovies() {
+      return this.$store.state.genreMovies
+    }
   },
   created() {
     const API_KEY = process.env.VUE_APP_TMDB_API_KEY
     const URL = 'https://api.themoviedb.org/3/movie/popular'
+    const URL2 = 'https://api.themoviedb.org/3/trending/movie/week'
+    const URL3 = 'https://api.themoviedb.org/3/trending/movie/top_rated'
 
     axios({
       method: "get",
@@ -88,6 +136,36 @@ export default {
       })
       .catch((error) => {
         console.log(error)
+      }),
+
+      axios({
+      method: "get",
+      url: URL2,
+      params: {
+        api_key: API_KEY,
+        language: 'ko-KR',
+      }
+    })
+      .then((response) => {
+          this.$store.dispatch('getMovies2', response.data.results)
+      })
+      .catch((error) => {
+        console.log(error)
+      }),
+
+      axios({
+      method: "get",
+      url: URL3,
+      params: {
+        api_key: API_KEY,
+        language: 'ko-KR',
+      }
+      })
+      .then((response) => {
+          this.$store.dispatch('getMovies3', response.data.results)
+      })
+      .catch((error) => {
+        console.log(error)
       })
   }
 }
@@ -100,85 +178,11 @@ export default {
   }
   .movie_second {
     max-width: 1320px;
-    
+    margin-right: auto;
+    margin-left: auto;
   }
   .movie_third {
     position: relative;
-  }
-  .movie_fourth {
-  }
-  /* .moive_left {
-    display: none;
-    position: absolute;
-    top: 0;
-    z-index: 1;
-    left: 0;
-    width: 0;
-    height: 100%;
-  }
-  .left_button {
-    align-items: flex-start;
-    opacity: 1 !important;
-    display: none;
-    position: absolute;
-    top: 0px;
-    z-index: 2;
-    left: -11px;
-    -webkit-box-align: center;
-    height: 100%;
-  }
-  .left_button_detail {
-    margin-top: calc((100vw - 60px) * 157 / 108 / 2 / 4 - 17px);
-    background: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMiIgaGVpZ2h0PSIxNiIgdmlld0JveD0iMCAwIDEyIDE2Ij4KICAgIDxnIGZpbGw9Im5vbmUiIGZpbGwtcnVsZT0iZXZlbm9kZCI+CiAgICAgICAgPHBhdGggZD0iTTAgMEgxMlYxNkgweiIgdHJhbnNmb3JtPSJyb3RhdGUoMTgwIDYgOCkiLz4KICAgICAgICA8cGF0aCBmaWxsPSIjMjkyQTMyIiBzdHJva2U9IiMyOTJBMzIiIHN0cm9rZS13aWR0aD0iLjM1IiBkPSJNMy40MjkgMTMuNDA5TDQuMzU0IDE0LjI1OCAxMC42OCA4LjQ2IDExLjE0MyA4LjAzNiA0LjM1NCAxLjgxMyAzLjQyOSAyLjY2MiA5LjI5MSA4LjAzNnoiIHRyYW5zZm9ybT0icm90YXRlKDE4MCA2IDgpIi8+CiAgICA8L2c+Cjwvc3ZnPgo=) 12px center / 12px no-repeat rgb(255, 255, 255);
-    box-sizing: border-box;
-    border: 1px solid rgb(249, 249, 249);
-    border-radius: 50%;
-    box-shadow: rgb(0 0 0 / 20%) 0px 0px 4px 0px;
-    width: 34px;
-    height: 34px;
-    cursor: pointer;
-  }
-  .moive_right {
-    display: none;
-    position: absolute;
-    top: 0;
-    z-index: 1;
-    right: 0;
-    width: 0;
-    height: 100%;
-  }
-  .right button {
-    align-items: flex-start;
-    opacity: 1 !important;
-    display: flex;
-    position: absolute;
-    top: 0px;
-    z-index: 2;
-    right: -11px;
-    -webkit-box-align: center;
-    height: 100%;
-  }
-  .right_button_detail {
-    margin-top: calc((100vw - 60px) * 157 / 108 / 2 / 4 - 17px);
-    display: flex;
-    -webkit-box-pack: center;
-    justify-content: center;
-    -webkit-box-align: center;
-    align-items: center;
-    background-color: rgb(255, 255, 255);
-    box-sizing: border-box;
-    border: 1px solid rgb(249, 249, 249);
-    border-radius: 50%;
-    box-shadow: rgb(0 0 0 / 20%) 0px 0px 4px 0px;
-    background-size: 12px;
-    width: 34px;
-    height: 34px;
-    cursor: pointer;
-  } */
-  .movie_fifth {
-    /* transform: translateX(-872px); */
-  }
-  .movie_sixth {
     margin-right: 20px;
     margin-left: 15px;
   }
@@ -191,21 +195,23 @@ export default {
     margin: 0;
   }
   .movie_subject {
-    line-height: 29px;
-    max-height: 58px;
-    padding: 4px 20px 9px 0;
+    margin-right: auto;
+    margin-left: auto;
+    margin: 0 60px;
     white-space: nowrap;
     max-width: 1320px;
-    margin-right: 15px;
-    margin-left: 15px;
+    padding: 12px 0 14px;
+    max-height: 60px;
+    line-height: 30px;
   }
   .movie_subject_name {
-    display: -webkit-box;
-    white-space: normal;
+    color: #292a32;
     overflow: hidden;
     text-overflow: ellipsis;
-    max-height: 60px;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: -0.4px;
+    line-height: 30px;
+    margin: 0px;
   }
 </style>

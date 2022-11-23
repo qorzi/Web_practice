@@ -1,19 +1,39 @@
 <template>
   <div class="settingbox">
-    <header class="settingname"> 설정 </header>
-    <div>
-      <div>
-        아이디 변경
-        <input class="login_input underline" type="text" v-model="username" placeholder="아이디를 입력하세요">
-        비밀번호 변경
-        <input class="login_input underline" type="password" v-model="password1" placeholder="비밀번호를 입력하세요">
-        <input class="login_input underline" type="password" v-model="password2" placeholder="위와 동일한 비밀번호를 입력하세요">
-        닉네임 변경
-        <input class="login_input underline" type="text" v-model="nickname" placeholder="닉네임을 입력하세요">
-        마케팅 정보
-
-        로그아웃
+    <header class="settingname">
+      <div class="settingname_1"></div>
+      <div class="settingname_2"></div>
+      <div class="settingname_3">설정</div>
+    </header>
+    <div class="settingcontext">
+      <div class="settingcontext_1">
+        <div class="settingcontext_2">
+          <section class = "settingcontext_3">
+            <div class="login">
+              <input class="login_input underline" type="text" v-model="username" placeholder="새로운 아이디를 입력하세요">
+            </div>
+            <div class="login">
+              <input class="login_input underline" type="password" v-model="password1" placeholder="새로운 비밀번호를 입력하세요">
+            </div>
+            <div class="login">
+              <input class="login_input underline" type="password" v-model="password2" placeholder="위와 동일한 비밀번호를 입력하세요">
+            </div>
+            <div class="login">
+              <input class="login_input underline" type="text" v-model="nickname" placeholder="새로운 닉네임을 입력하세요">
+            </div>
+          </section>
+          <button class="btn">정보 변경</button>
+          <ul class ="marketing">
+            <li class="marketing2">
+              <div class="marketing3">
+                <div class="marketing4">  
+                마케팅 정보
+                </div>
+              </div>
+            </li>
+          </ul>
         <!-- 탈퇴하기  -->
+        </div>
       </div>
     </div>
   </div>
@@ -21,7 +41,29 @@
 
 <script>
 export default {
+  name: 'UserModify',
+  data() {
+    return {
+      password1: null,
+      password2: null,
+      nickname: null,
+    }
+  },
+  methods: {
+    modifyUser() {
+      const password1 = this.password1
+      const password2 = this.password2
+      const nickname = this.nickname
 
+      const payload = {
+        password1,
+        password2,
+        nickname,
+      }
+
+      this.$store.dispatch('modifyUser', payload)
+    }
+  }
 }
 </script>
 
@@ -35,8 +77,12 @@ export default {
     height: auto;
     min-height: 540px;
     border-radius: 6px;
+    overflow: auto;
   }
   .settingname {
+    left: 0px;
+    z-index: 50;
+    background: rgb(255, 255, 255);
     box-sizing: border-box;
     font-size: 17px;
     font-weight: 700;
@@ -49,5 +95,85 @@ export default {
     top: 0px;
     text-align: left;
     height: auto;
+  }
+  .settingcontext {
+    height: auto;
+    overflow: auto;
+    box-sizing: border-box;
+    padding: 96px 0px 0px;
+  }
+  .settingname_1 {
+    display: flex;
+    -webkit-box-pack: justify;
+    justify-content: space-between;
+  }
+  .settingname_2 {
+    display: flex;
+    transform: translate3d(0px, 0px, 0px);
+    -webkit-box-pack: center;
+    justify-content: center;
+    -webkit-box-align: center;
+    align-items: center;
+    height: 30px;
+    margin: 0px 4px 10px;
+    opacity: 1;
+  }
+  .settingname_3 {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    left: 0px;
+    white-space: nowrap;
+    text-align: center;
+    font-size: 17px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    line-height: 22px;
+    margin: 11px 100px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    opacity: 0;
+  }
+  .settingcontext_1 {
+    text-align: left;
+  }
+  .settingcontext_2 {
+    margin: 0px 20px;
+  }
+  .settingcontext_3 {
+    margin: 32px 0px;
+  }
+  .marketing {
+    list-style: none;
+    margin: 0px;
+    padding: 8px 0px 0px;
+  }
+  .marketing2 {
+    text-align: left;
+    box-sizing: border-box;
+    min-height: 48px;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    color: rgb(0, 0, 0);
+    font-size: 17px;
+    font-weight: 400;
+    letter-spacing: -0.7px;
+    line-height: 22px;
+  }
+  .marketing3 {
+    display: flex;
+    flex: 1 1 0%;
+    -webkit-box-align: center;
+    align-items: center;
+    box-sizing: border-box;
+    min-height: 48px;
+    border-bottom: 1px solid rgb(234, 233, 232);
+  }
+  .marketing4 {
+    flex: 1 1 0%;
+    white-space: pre-wrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 </style>

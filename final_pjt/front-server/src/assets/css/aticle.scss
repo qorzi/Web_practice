@@ -1,9 +1,28 @@
+.article-all {
+  // display: flex;
+  // justify-content: center;
+  // align-items: flex-start;
+  // align-items: stretch;
+}
+.block00 {
+  margin: 0 auto;
+  padding: 10px 10px;
+  padding-top: 50px;
+  width: 700px;
+  // @media screen and (max-width: 700px) {
+  //   display: none;
+  // }
+  @media screen and (max-width: 700px) {
+    width: 92%;
+  }
+}
+
 .article-box {
   margin: 0 auto;
   padding: 10px 10px;
   padding-top: 50px;
   width: 700px;
-  @media screen and (max-width: 720px) {
+  @media screen and (max-width: 700px) {
     width: 92%;
   }
 }
@@ -40,6 +59,10 @@
     background-color: $gray-basic;
     cursor: pointer;
     
+  }
+
+  a {
+    font-size: 13px;
   }
 
   &_title {
@@ -208,6 +231,105 @@
     }
   }
 
+}
+.q-box {
+  width: 60px;
+  height: 28px;
+  background-color: rgba(255, 107, 107, 0.92);
+  border-radius: 7px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 15px;
+
+  &:hover {
+    cursor: pointer;
+  }
+  
+  &_inner {
+    display: flex;
+    align-items: center;
+
+    &_thumb {
+      font-size: 12px;
+      // font-weight: bold;
+      margin-right: 3px;
+    }
+
+    &_text {
+      font-size: 12px;
+      font-weight: bold;
+    }
+  }
+
+}
+.f-box {
+  width: 100px;
+  height: 28px;
+  background-color: rgba(238, 238, 238, 0.384);
+  border-radius: 7px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 15px;
+
+  &:hover {
+    cursor: pointer;
+  }
+  
+  &_inner {
+    display: flex;
+    align-items: center;
+
+    &_thumb {
+      font-size: 12px;
+      // font-weight: bold;
+      margin-right: 3px;
+    }
+
+    &_text {
+      font-size: 12px;
+      font-weight: bold;
+    }
+  }
+
+}
+
+.n-box {
+  width: 100px;
+  height: 28px;
+  background-color: rgba(128, 255, 119, 0.947);
+  border-radius: 7px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 15px;
+
+  &:hover {
+    cursor: pointer;
+  }
+  
+  &_inner {
+    display: flex;
+    align-items: center;
+
+    &_thumb {
+      font-size: 12px;
+      // font-weight: bold;
+      margin-right: 3px;
+    }
+
+    &_text {
+      font-size: 12px;
+      font-weight: bold;
+    }
+  }
+
+}
+
+.pp {
+  display: flex;
+  justify-content: space-between;
 }
 
 // 댓글 입력

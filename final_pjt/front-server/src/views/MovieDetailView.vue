@@ -33,18 +33,28 @@
       
     </div>
     <!-- <p>{{detailMovie}}</p> -->
-    
+    <div>
+      <div class="movie-youtube-area">
+        관련 영상
+        <div>
+        <YoutubeList :title="detailMovie.title"/>
+        </div>
+        <hr>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
 import axios from 'axios'
 import ActorView from '../components/ActorView.vue'
+import YoutubeList from '@/components/YoutubeList'
 
 export default {
   name: 'MovieDetailView',
   components: {
     ActorView,
+    YoutubeList,
   },
   data() {
     return {
@@ -132,5 +142,7 @@ export default {
 </script>
 
 <style>
-
+  .movie-youtube-area {
+  font-size: 32px;
+}
 </style>

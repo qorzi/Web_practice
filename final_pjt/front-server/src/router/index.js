@@ -9,6 +9,7 @@ import SignUpView from '@/views/SignUpView'
 import UserView from '@/views/UserView'
 import TestHome from '@/views/TestHome'
 import KakaoMap from '@/views/KakaoMap'
+import UserModify from '@/views/UserModify'
 import MovieDetailView from '@/views/MovieDetailView'
 
 
@@ -91,6 +92,12 @@ const routes = [
       }
     }
   },
+  
+  {
+    path: '/usermodify',
+    name: 'UserModify',
+    component: UserModify,
+  }
 
 ]
 

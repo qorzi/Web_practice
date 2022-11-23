@@ -9,9 +9,11 @@ from rest_framework.decorators import permission_classes
 from rest_framework.permissions import IsAuthenticated
 
 from rest_framework import status
-from django.shortcuts import get_object_or_404, get_list_or_404
-from .serializers import ArticleListSerializer, ArticleSerializer, CommentSerializer
+from django.shortcuts import get_object_or_404, get_list_or_404, redirect
+# from .serializers import ArticleListSerializer, ArticleSerializer, CommentSerializer
+from .serializers import ArticleListSerializer, ArticleSerializer, CommentSerializer, ArticleLikeSerializer
 from .models import Article, Comment
+from django.http import JsonResponse
 
 
 
@@ -92,3 +94,25 @@ def comment_create(request, article_pk):
     if serializer.is_valid(raise_exception=True):
         serializer.save(article=article)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+
+# 게시글 좋아요 등록 및 해제
+@api_view(['POST'])
+@permission_classes([IsAuthenticated]) # 인증된 사용자만 권한 허용
+def article_like(request, article_pk):
+    article = get_object_or_404(Article, pk=article_pk)
+    user = request.user
+    # 해제
+    if article.like_article_users.filter(pk=user.pk).exists():
+        article.like_article_users.remove(user)
+    # 등록
+    else:
+        article.like_article_users.add(user)
+        
+    serializer = ArticleLikeSerializer(article)
+    
+    like_status = {
+        'id' : serializer.data.get('id'),
+        'count' : article.like_article_users.count(),
+    }    
+    return JsonResponse(like_status)

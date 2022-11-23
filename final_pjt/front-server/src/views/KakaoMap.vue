@@ -149,24 +149,30 @@ export default {
         navigator.geolocation.getCurrentPosition(this.getPositionValue, this.geolocationError)
       }
     },
-    getPositionValue (val) {
-      console.log(val)
-      this.positionObj.latitude = val.coords.latitude
-      this.positionObj.longitude = val.coords.longitude
-      this.isPositionReady = true
-      this.$store.commit('GETCURRENTSITE', this.positionObj)
-      this.setAlert('주소 확인 완료')
-      this.initMap()
-    },
-    geolocationError () {
-      this.setAlert('위치 정보를 찾을 수 없습니다.2')
-    },
-    setAlert (text) {
-      alert(text)
-    }
+    // getPositionValue (val) {
+    //   console.log(val)
+    //   this.positionObj.latitude = val.coords.latitude
+    //   this.positionObj.longitude = val.coords.longitude
+    //   this.isPositionReady = true
+    //   this.$store.commit('GETCURRENTSITE', this.positionObj)
+    //   this.setAlert('주소 확인 완료')
+    //   this.initMap()
+    // },
+    // geolocationError () {
+    //   this.setAlert('위치 정보를 찾을 수 없습니다.2')
+    // },
+    // setAlert (text) {
+    //   alert(text)
+    // }
   },
   created() {
-    this.getCurrentPosition()
+    // this.getCurrentPosition()
+    // 사용자 위치정보 요청
+    navigator.geolocation.getCurrentPosition((position) => {
+      this.positionObj.latitude = position.coords.latitude
+      this.positionObj.longitude = position.coords.longitude
+      this.$store.commit('GETCURRENTSITE', this.positionObj)
+    })
   },
   mounted() {
     if (!window.kakao || !window.kakao.maps) {

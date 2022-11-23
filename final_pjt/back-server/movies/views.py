@@ -23,7 +23,7 @@ movies = Movie.objects.annotate(
 def movies_main(request):
     # 인기 높은 순서로 정렬, 관객 수 높은 순으로 정렬
     # 정렬기준에 따라 쿼리문 수정하여 정렬 가능!!
-    main_movies = movies.filter(release_date__lte=date.today()).order_by('-release_date','-vote_average')[:30]
+    main_movies = movies.filter(release_date__lte=date.today()).order_by('-release_date','-vote_average')[:10]
     serializer = MovieListSerializer(main_movies, many=True)
     print(main_movies)
     return Response(serializer.data)
@@ -35,52 +35,52 @@ def movie_sort(request, sort_num):
     if sort_num == 1: # 관객수(popularity)
         sort_movies = movies.order_by('-popularity')[:30]
     elif sort_num == 2: # 최신순(개봉한 영화만)
-        sort_movies = movies.filter(release_date__lte=date.today()).order_by('-release_date')[:30]
+        sort_movies = movies.filter(release_date__lte=date.today()).order_by('-release_date')[:10]
     elif sort_num == 3: # 개봉예정작 : 빠른 개봉 순으로
-        sort_movies = movies.filter(release_date__gt=date.today()).order_by('release_date')[:30]
+        sort_movies = movies.filter(release_date__gt=date.today()).order_by('release_date')[:10]
     elif sort_num == 4: # 리뷰 많은 순(개봉한 영화만), 최신순
-        sort_movies = movies.filter(release_date__lte=date.today()).order_by('-review_movie_count', '-release_date')[:30]
+        sort_movies = movies.filter(release_date__lte=date.today()).order_by('-review_movie_count', '-release_date')[:10]
     elif sort_num == 5: # 평점순(vote_average/개봉한 영화)
-        sort_movies = movies.filter(release_date__lte=date.today()).order_by('-vote_average') [:30] 
+        sort_movies = movies.filter(release_date__lte=date.today()).order_by('-vote_average') [:10]
     # 장르 포함
     elif sort_num == 12: # 모험
-        sort_movies = movies.filter(genre_check=12).order_by('-release_date')[:30]
+        sort_movies = movies.filter(genre_check=12).order_by('-vote_average', '-release_date')[:10]
     elif sort_num == 14: # 판타지
-        sort_movies = movies.filter(genre_check=14).order_by('-release_date')[:30]
+        sort_movies = movies.filter(genre_check=14).order_by('-vote_average', '-release_date')[:10]
     elif sort_num == 16: # 애니메이션
-        sort_movies = movies.filter(genre_check=16).order_by('-release_date')[:30]
+        sort_movies = movies.filter(genre_check=16).order_by('-vote_average', '-release_date')[:10]
     elif sort_num == 18: # 드라마
-        sort_movies = movies.filter(genre_check=18).order_by('-release_date')[:30]
+        sort_movies = movies.filter(genre_check=18).order_by('-vote_average', '-release_date')[:10]
     elif sort_num == 27: # 공포
-        sort_movies = movies.filter(genre_check=27).order_by('-release_date')[:30]
+        sort_movies = movies.filter(genre_check=27).order_by('-vote_average', '-release_date')[:10]
     elif sort_num == 28: # 액션
-        sort_movies = movies.filter(genre_check=28).order_by('-release_date')[:30]
+        sort_movies = movies.filter(genre_check=28).order_by('-vote_average', '-release_date')[:10]
     elif sort_num == 35: # 코미디
-        sort_movies = movies.filter(genre_check=35).order_by('-release_date')[:30]
+        sort_movies = movies.filter(genre_check=35).order_by('-vote_average', '-release_date')[:10]
     elif sort_num == 36: # 역사
-        sort_movies = movies.filter(genre_check=36).order_by('-release_date')[:30]
+        sort_movies = movies.filter(genre_check=36).order_by('-vote_average', '-release_date')[:10]
     elif sort_num == 37: # 서부
-        sort_movies = movies.filter(genre_check=37).order_by('-release_date')[:30]
+        sort_movies = movies.filter(genre_check=37).order_by('-vote_average', '-release_date')[:10]
     elif sort_num == 53: # 스릴러
-        sort_movies = movies.filter(genre_check=53).order_by('-release_date')[:30]
+        sort_movies = movies.filter(genre_check=53).order_by('-vote_average', '-release_date')[:10]
     elif sort_num == 80: # 범죄
-        sort_movies = movies.filter(genre_check=80).order_by('-release_date')[:30]
+        sort_movies = movies.filter(genre_check=80).order_by('-vote_average', '-release_date')[:10]
     elif sort_num == 99: #다큐멘터리
-        sort_movies = movies.filter(genre_check=99).order_by('-release_date')[:30]
+        sort_movies = movies.filter(genre_check=99).order_by('-vote_average', '-release_date')[:10]
     elif sort_num == 878: # SF
-        sort_movies = movies.filter(genre_check=878).order_by('-release_date')[:30]
+        sort_movies = movies.filter(genre_check=878).order_by('-vote_average', '-release_date')[:10]
     elif sort_num == 9648: # 미스터리
-        sort_movies = movies.filter(genre_check=9648).order_by('-release_date')[:30]
+        sort_movies = movies.filter(genre_check=9648).order_by('-vote_average', '-release_date')[:10]
     elif sort_num == 10402: # 음악
-        sort_movies = movies.filter(genre_check=10402).order_by('-release_date')[:30]
+        sort_movies = movies.filter(genre_check=10402).order_by('-vote_average', '-release_date')[:10]
     elif sort_num == 10749: # 로맨스
-        sort_movies = movies.filter(genre_check=10749).order_by('-release_date')[:30]
+        sort_movies = movies.filter(genre_check=10749).order_by('-vote_average', '-release_date')[:10]
     elif sort_num == 10751: # 가족
-        sort_movies = movies.filter(genre_check=10751).order_by('-release_date')[:30]
+        sort_movies = movies.filter(genre_check=10751).order_by('-vote_average', '-release_date')[:10]
     elif sort_num == 10752: # 전쟁
-        sort_movies = movies.filter(genre_check=10752).order_by('-release_date')[:30]
+        sort_movies = movies.filter(genre_check=10752).order_by('-vote_average', '-release_date')[:10]
     elif sort_num == 10770: # TV 영화
-        sort_movies = movies.filter(genre_check=10770).order_by('-release_date')[:30]
+        sort_movies = movies.filter(genre_check=10770).order_by('-vote_average', '-release_date')[:10]
     serializer = MovieListSerializer(sort_movies, many=True)
     return Response(serializer.data)
 
@@ -114,3 +114,51 @@ def movie_like(request, movie_pk):
         'like_movie_users' : serializer.data.get('like_movie_users'),
     }
     return JsonResponse(like_movie_register)
+
+# # 영화가 DB에 존재하면 좋아요 실행, 없으면 영화를 DB에 담고 좋아요 실행
+# def movie_like(request, movie_pk):
+#     if movie.filter(pk=movie_pk).exists():
+
+#         movie = get_object_or_404(Movie, pk=movie_pk)        
+#         user = request.user
+#         # 해제
+#         if movie.like_movie_users.filter(pk=user.pk).exists():
+#             movie.like_movie_users.remove(user)
+#         # 등록
+#         else:
+#             movie.like_movie_users.add(user)
+
+#         serializer = MovieLikeSerialzer(movie)
+
+#         like_movie_register = {
+#             'id' : serializer.data.get('id'),
+#             'like_movie_users_count' : movie.like_movie_users.count(),
+#             'like_movie_users' : serializer.data.get('like_movie_users'),
+#         }
+#     else:
+#         movie.
+#     return JsonResponse(like_movie_register)
+
+# # 영화 검색
+# class StandardResultsSetPagination(PageNumberPagination):
+#     page_size = 6
+#     page_query_param = 'page'
+
+# class MovieListPaginate(APIView):
+
+#     def get(self, request):
+#         paginator = StandardResultsSetPagination()
+#         if request.GET.get('orderBy'):
+#             orderBy = request.GET.get('orderBy')
+#             movies = Movie.objects.order_by(orderBy)
+#         elif request.GET.get('q'):
+#             q = request.GET.get('q')
+#             movies = Movie.objects.filter(title__icontains=q)
+#             serializer = MovieSerializer(movies, many=True)
+#             return Response(serializer.data)
+#         else :
+#             return Response({"message": "no result"})
+
+#         result_page = paginator.paginate_queryset(movies,request)
+#         serializer = MovieSerializer(result_page, many=True)
+#         return Response(serializer.data)

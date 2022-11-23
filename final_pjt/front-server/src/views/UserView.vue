@@ -1,43 +1,52 @@
 <template>
-  <div>
-    <div class="wall">
-      <button class="wallbutton"></button>
-    </div>
-    <header class="userbox">
-      <div class="usernamebox"> 
-        <h1 class="username"> 주승</h1>
-      </div>
-    </header>
-
-    <div class="moive_first">
-    <div class= "movie_subject">
-      <p class= "movie_subject_name">회원님이 좋아요 한 영화</p>
-    </div>
-    <div class="movie_second">
-      <div class="movie_third">
-        <div class="movie_fourth">
-          <div class="movie_fifth">
-            <div class="movie_sixth">
-                  <ul class="movie_list">
-              <swiper :options="swiperOption">
-                <swiper-slide
-                  v-for="movie in movies" 
-                  :key="movie.id">
-                  <MovieList :movie="movie"/>
-                </swiper-slide>
-              </swiper>
-                  </ul>
+  <div class= "uvborder">
+    <div class="uvsecond">
+      <div class="uvthird">
+        <div class="uvfourth">
+          <div class="wall">
+              <div>
+                <button class="wallbutton" @click="openSetting"> </button>
+              </div>
+          </div>
+          <div>
+          <div style="margin: 0px 20px">
+          <header class="userbox">
+              <div class ="profileboarder">
+                <div class ="profile" ></div>
+              </div>
+              <div class="usernamebox"> 
+                <h1 class="username"> 주승</h1>
+              </div>
+          </header>
+          </div>
+          <div class="moive_first">
+          <div class= "movie_subject">
+            <p class= "movie_subject_name">회원님이 좋아요 한 영화</p>
+          </div>
+          <div class="movie_second">
+            <div class="movie_third">
+              <ul class="movie_list">
+          <swiper :options="swiperOption">
+            <swiper-slide
+              v-for="movie in movies" 
+              :key="movie.id">
+              <MovieList :movie="movie"/>
+            </swiper-slide>
+          </swiper>
+              </ul>
+              </div>
+              </div>
             </div>
-          </div> 
-        </div>
+          </div>
+          </div>
       </div>
     </div>
-  </div>
   </div>
 </template>
 
 <script>
 import MovieList from '@/components/MovieList'
+// import UserModify from '@/views/UserModify'
 import axios from 'axios'
 import "swiper/css/swiper.css";
 import { Swiper, SwiperSlide } from 'vue-awesome-swiper'
@@ -47,10 +56,17 @@ export default {
   components: {
     MovieList, 
     Swiper,
-    SwiperSlide
+    SwiperSlide,
+    // UserModify
   },
   data() {
     return {
+      menu : [
+      {
+        name: "정보수정",
+        link: "/usermodify"
+      }
+      ],
       swiperOption: {
           slidesPerView: 3,
           centeredSlides: false,
@@ -104,6 +120,13 @@ export default {
       })
     },
   methods: {
+    openSetting() {
+      this.$router.push({ name: 'UserModify'})
+    },
+    fileChange: function(e) {
+      console.log(e.target.files)
+      this.file = e.target.files[0];
+    },
     getUser() {
       if (this.isLogin === true) { 
         this.$store.dispatch('getUser')
@@ -126,11 +149,49 @@ export default {
 </script>
 
 <style>
+  .profile {
+    position: relative;
+    z-index: 1;
+    background: url(https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTyk5JAnYUj_KF4VKN9RJKje3ABzOc2JB1yftEo0ZLT-ur8V0dBbAqa0VeFUhphbApVX6E&usqp=CAU);
+    background-size: cover;
+    width: 100%;
+    height: 100%;
+  }
+  .profileboarder {
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    border-radius: 50%;
+    display: flex;
+    position: relative;
+    -webkit-box-pack: center;
+    justify-content: center;
+    -webkit-box-align: center;
+    align-items: center;
+    width: 56px;
+    height: 56px;
+    overflow: hidden;
+  }
+  .uvborder {
+    display: flex;
+    flex-direction: column;
+  }
+  .uvsecond {
+    flex: 1 1 0%;
+    margin: 28px 0px 30px;
+  }
+  .uvthird {
+    max-width: 800px;
+    margin: 0px auto;
+  }
+  .uvfourth {
+    border: 1px solid;
+    border-radius: 6px;
+    border-color: rgb(227, 227, 227);
+  }
   .wall {
     position: relative;
     background: url(https://d2rlq84xifqisi.cloudfront.net/images/mypagePatternResize.2e73487f09488acbeb2d.jpg);
     background-size: 180px 177px;
-    padding-top: 20%;
+    padding-top: 30%;
     margin: 0 0 -20px;
   }
   .wallbutton {
@@ -151,11 +212,13 @@ export default {
   }
   .usernamebox {
     display: flex;
-    margin-top: 50px;
+    -webkit-box-align: center;
+    align-items: center;
+    margin-top: 4px;
   }
   .username {
     color: rgb(0, 0, 0);
-    font-size: 350x;
+    font-size: 25px;
     font-weight: 700;
     letter-spacing: -0.9px;
     line-height: 30px;
@@ -170,13 +233,6 @@ export default {
   }
   .movie_third {
     position: relative;
-  }
-  .movie_fourth {
-  }
-  .movie_fifth {
-    /* transform: translateX(-872px); */
-  }
-  .movie_sixth {
     margin-right: 20px;
     margin-left: 15px;
   }

@@ -17,15 +17,24 @@
 
       <div class="detail-box_text">
         <span class="material-symbols-outlined thumb">thumb_up</span>
-        <span class="thumb">0</span>
+        <span class="thumb">{{like_cnt}}</span>
         <span class="material-symbols-outlined chat p-l">chat_bubble</span>
         <span class="chat">{{comment_cnt}}</span>
       </div>
-      <div class="g-box">
-        <div class="g-box_inner">
-          <span class="material-symbols-outlined g-box_inner_thumb">thumb_up</span>
-          <span class="g-box_inner_text">공감</span>
+      <div class="pp">
+        <div @click="likeArticle" :class="{'q-box': likeMine, 'g-box': !likeMine}">
+          <div class="g-box_inner">
+            <span class="material-symbols-outlined g-box_inner_thumb">thumb_up</span>
+            <span class="g-box_inner_text">공감</span>
+          </div>
         </div>
+        <div @click="badwordFilter" :class="{'n-box': badwordFilterOn, 'f-box':!badwordFilterOn}">
+          <div class="f-box_inner">
+            <span class="material-symbols-outlined">mood_bad</span>
+            <span class="f-box_inner_text">비속어 필터</span>
+          </div>
+        </div>
+
       </div>
     </div>
     <CommentList :article="article" @create-comment="createComment" @delete-comment="deleteComment" ref="commentRef"/>
@@ -57,10 +66,26 @@ export default {
     return {
       article: null,
       comment_cnt: null,
+      like_cnt: null,
     }
   },
   created() {
     this.getArticleDetail()
+  },
+  computed: {
+    badwordFilterOn() {
+      return this.$store.state.badwordFilter
+    },
+    likeMine() {
+      let mylike = false
+      const likeUsers = this.article.like_article_users
+      console.log(likeUsers)
+      if (likeUsers.includes(this.article.user)) {
+        mylike = true
+      }
+      console.log(mylike)
+      return mylike
+    },
   },
   methods: {
     getArticleDetail() {
@@ -74,8 +99,9 @@ export default {
         }
       })
         .then((res) => {
-          // console.log(res)
+          console.log('!!!!', res.data)
           this.article = res.data
+          this.like_cnt = this.article.like_article_users.length
           this.comment_cnt = this.article.comment_count
         })
         .catch((err) => {
@@ -95,6 +121,19 @@ export default {
         })
         .catch((err) => {
           console.log(err)
+        })
+    },
+    likeArticle() {
+      console.log(`${API_URL}/api/v1/${this.article.id}/like/`)
+      axios({
+        method: 'post',
+        url: `${API_URL}/api/v1/${this.article.id}/like/`,
+        headers: {
+          Authorization: `Token ${this.$store.state.token}`
+        }
+      })
+        .then(() => {
+          this.getArticleDetail()
         })
     },
     displayedAt(at) {
@@ -131,7 +170,11 @@ export default {
     },
     deleteComment() {
       this.getArticleDetail()
-    }
+    },
+    badwordFilter() {
+      this.$store.commit('BADWORD_FILTER')
+    },
+    
   },
 }
 </script>

@@ -11,10 +11,11 @@
 <script>
 import ArticleListItem from '@/components/ArticleListItem'
 
+
 export default {
   name: 'ArticleList',
   components: {
-    ArticleListItem
+    ArticleListItem,
   },
   computed: {
     articles() {

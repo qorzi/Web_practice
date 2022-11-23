@@ -4,12 +4,12 @@
       <div class ="movie_border" @click="goMovieDetail"> 
         <div class="movie_img">
           <a class ="moviegood"> ♥</a>
-          <img :src="getImage" :alt="movie.title" class= "movie">  
+          <img :src="getTrend" :alt="movie2.title" class= "movie">  
         </div>
       </div>
       <div class="context">
-        <div class = "movie_title">{{ movie.title }}</div>
-        <div class= "context_detail">{{createdYear}} 평균 ★{{movie.vote_average.toFixed(1) }}</div>
+        <div class = "movie_title">{{ movie2.title }}</div>
+        <div class= "context_detail">{{createdYear}} 평균 ★{{movie2.vote_average.toFixed(1)}}</div>
         <div class= "context_detail">{{genres.join(' ')}}</div>
       </div>
     </a>
@@ -18,9 +18,9 @@
 
 <script>
 export default {
-  name: 'MovieList',
+  name: 'MovieList2',
   props: {
-    movie: Object,
+    movie2: Object,
   },
   data() {
     return {
@@ -32,18 +32,19 @@ export default {
     this.convertGenre()
   },
   computed: {
-    getImage() {
-      return `https://image.tmdb.org/t/p/original/${this.movie.poster_path}`
+    getTrend() {
+      return `https://image.tmdb.org/t/p/original/${this.movie2.poster_path}`
     },
     createdYear() {
-      let release_date = this.movie.release_date
+      let release_date = this.movie2.release_date
       release_date = release_date.substr(0, 4)
       return release_date
     },
+
   },
   methods: {
     convertGenre() {
-      const moviegenre_nums = this.movie.genre_ids
+      const moviegenre_nums = this.movie2.genre_ids
       const genres = moviegenre_nums.reduce((acc, genre_num) => {
         acc.push(this.genre[genre_num])
           return acc
@@ -51,10 +52,11 @@ export default {
       this.genres = genres
     },
     goMovieDetail() {
-        this.$router.push({ name: 'MovieDetailView', params: { id: this.movie.id } })
+        this.$router.push({ name: 'MovieDetailView', params: { id: this.movie2.id } })
     },
   }
 }
+
 </script>
 
 <style>

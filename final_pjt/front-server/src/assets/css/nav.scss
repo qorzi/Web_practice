@@ -13,6 +13,7 @@
   grid-template-areas: "left right";
 
   &__left {
+    margin-left: 30%;
     grid-area: left;
     display: flex;
     align-items: center;
@@ -61,6 +62,7 @@
     align-items: center;
     justify-content: flex-end;
     padding-right: 1rem;
+    margin-right: 30%;
 
     gap: 1rem;
 
@@ -69,7 +71,7 @@
       align-items: center;
       justify-content: center;
       height: 2.5rem;
-      width: 10rem;
+      width: 12rem;
       border-radius: 0.5rem;
       background-color: #f5f5f5;
 

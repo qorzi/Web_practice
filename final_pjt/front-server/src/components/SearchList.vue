@@ -5,7 +5,8 @@
       <span class="material-symbols-outlined search-info_icon" @click="closeSearch">close</span>
     </div>
     <div class="search-box">
-      <div class="search-header">
+      <div class="search-box_inner">
+        <div class="search-header">
         <div class="search-header_outer">
           <div class="search-header_inner">
             <span>콘텐츠</span>
@@ -35,6 +36,8 @@
           </div>
         </div>
       </div>
+      </div>
+      
       <div class="hr-box"></div>
     </div>
   </div>

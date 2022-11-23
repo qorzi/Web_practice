@@ -13,4 +13,6 @@ urlpatterns = [
     path('schema/', SpectacularAPIView.as_view(), name='schema'),
     # # optional UI
     path('swagger/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
+    # 게시글 좋아요 등록 해제
+    path('<int:article_pk>/like/', views.article_like, name='article_like'), 
 ]

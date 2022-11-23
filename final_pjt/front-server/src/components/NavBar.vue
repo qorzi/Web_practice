@@ -13,7 +13,7 @@
     <div class="nav__right">
       <!-- <!— search input -> -->
       <div class="nav__right__search">
-        <input type="text" placeholder="검색" v-model="searchText" @keyup.enter="searchMovie"/>
+        <input type="text" placeholder="영화를 검색해보세요. " v-model="searchText" @keyup.enter="searchMovie"/>
       </div>
       <div v-if="!isLogin" class="nav__right__login" @click="openLogin">로그인</div>
       <div v-else class="nav__right__login" @click="logOut">로그아웃</div>
