@@ -38,6 +38,7 @@ export default {
   display: flex;
   flex-flow: row nowrap;
   justify-content: space-around;
+  /* justify-content: stretch; */
   list-style-type: none;
   padding-left: 0;
 }

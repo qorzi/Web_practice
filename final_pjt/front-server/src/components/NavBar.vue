@@ -1,7 +1,10 @@
 <template>
   <nav class="nav">
     <div class="nav__left">
-      <div class="nav__left__logo">로고</div>
+      <div class="nav__left__logo" @click="goHome">
+        <img v-if="isDarkMode" src="@/assets/cinephile_day.png" alt="">
+        <img v-else src="@/assets/cinephile_night.png" alt="">
+      </div>
       <div class="nav__left__menu">
         <router-link class="nav__left__menu__link" v-for="item in menu" :key="item.name" :to="item.link">
           <div class="nav__left__menu__item">
@@ -24,17 +27,17 @@
 </template>
 
 <script>
-
+import { mapState } from 'vuex'
 
 export default {
   name: 'NavBar',
   data() {
     return {
       menu: [
-        {
-          name: "홈",
-          link: "/home",
-        },
+        // {
+        //   name: "홈",
+        //   link: "/home",
+        // },
         {
           name: "커뮤니티",
           link: "/community",
@@ -69,19 +72,23 @@ export default {
       this.$store.commit('CLOSE_SEARCH')
       this.$store.dispatch('searchMovie', this.searchText)
     },
+    goHome() {
+      this.$router.push({ name: 'TestHome' })
+    }
   },
   computed: {
     isLogin() {
       return this.$store.getters.isLogin
     },
-    isModalLogin() {
-      return this.$store.state.isModalLogin
-    }
+    ...mapState([
+      'isModalLogin',
+      'isDarkMode',
+    ])
   },
 
 }
 </script>
 
 <style>
-
+  
 </style>

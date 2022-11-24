@@ -6,9 +6,10 @@
     width: 200px;
     height: 300px;
     border-radius: 5px;
-    // @media screen and (max-width: 720px){
-    //   width: 90%;
-    // }
+    @media screen and (max-width: 800px){
+      width: 90%;
+      height: 90%;
+    }
   }
 
   &_data {

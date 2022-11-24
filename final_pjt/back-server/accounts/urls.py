@@ -10,5 +10,7 @@ app_name = 'accounts'
 urlpatterns = [
     path('delete/', views.user_delete), # 회원탈퇴
     path('<int:user_pk>/list/', views.user_movie_list), # 사용자가 좋아요/위시리스트/평점을 준 영화 목록 조회각 목록과 그 수를 출력)
+    path('<int:user_pk>/profile/', views.user_profile),# 상대방 프로필 조회
+    # path('<int:user_pk>/profile/', views.user_profile),# 상대방 프로필 조회
     # path("kakao/login/callback/", views.kakao_login) # Kakao Login
 ]

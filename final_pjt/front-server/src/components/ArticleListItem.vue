@@ -6,7 +6,7 @@
     <p class="article-item_username">익명</p>
     <div class="article-item_icon">
       <span class="material-symbols-outlined thumb">thumb_up</span>
-      <span class="thumb">0</span>
+      <span class="thumb">{{like_cnt}}</span>
       <span class="material-symbols-outlined chat p-l">chat_bubble</span>
       <span class="chat">{{comment_cnt}}</span>
     </div>
@@ -47,6 +47,7 @@ export default {
       })
         .then((res) => {
           // console.log(res)
+          this.like_cnt = res.data.like_article_users.length
           this.comment_cnt = res.data.comment_count
           // console.log(this.comment_count)
         })

@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import MovieView from '@/views/MovieView'
+// import MovieView from '@/views/MovieView'
 import ArticleView from '@/views/ArticleView'
 import CreateView from '@/views/CreateView'
 import ArticleDetailView from '@/views/ArticleDetailView'
@@ -19,7 +19,7 @@ const routes = [
   {
     path: '/',
     name: 'movies',
-    component: MovieView
+    component: TestHome
   },
   {
     path: '/home',

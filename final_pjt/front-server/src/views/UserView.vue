@@ -3,7 +3,8 @@
     <div class="uvsecond">
       <div class="uvthird">
         <div class="uvfourth">
-          <div class="wall">
+          <!-- <div class="wall" :style="{backgroundImage: url(`${backgroundUrl}`)}"> -->
+            <div class="wall" ref="bgstyle">
               <div>
                 <button class="wallbutton" @click="openSetting"> </button>
               </div>
@@ -15,28 +16,31 @@
                 <div class ="profile" ></div>
               </div>
               <div class="usernamebox"> 
-                <h1 class="username"> 주승</h1>
+                <h1 class="username">{{this.$store.state.nickname}}</h1>
               </div>
           </header>
           </div>
-          <div class="moive_first">
-          <div class= "movie_subject">
-            <p class= "movie_subject_name">회원님이 좋아요 한 영화</p>
-          </div>
-          <div class="movie_second">
-            <div class="movie_third">
-              <ul class="movie_list">
-          <swiper :options="swiperOption">
-            <swiper-slide
-              v-for="movie in movies" 
-              :key="movie.id">
-              <MovieList :movie="movie"/>
-            </swiper-slide>
-          </swiper>
-              </ul>
-              </div>
-              </div>
-            </div>
+          <div class="moive_first_user">
+      <div class= "movie_subject_user">
+        <p class= "movie_subject_name_user">회원님이 좋아요 한 영화</p>
+      </div>
+      <div class="movie_second_user">
+        <div class="movie_third_user">
+          <ul class="movie_list_user">
+            <swiper :options="swiperOption">
+              <swiper-slide
+                v-for="(movie, index) in likeMovies" 
+                :key="movie.id">
+                <MovieList4
+                  :movie="movie"
+                  :index="index"
+                />
+              </swiper-slide>
+            </swiper>
+          </ul>
+        </div>
+      </div> 
+    </div>
           </div>
           </div>
       </div>
@@ -45,22 +49,24 @@
 </template>
 
 <script>
-import MovieList from '@/components/MovieList'
-// import UserModify from '@/views/UserModify'
+import _ from 'lodash'
+import MovieList4 from '@/components/MovieList4'
 import axios from 'axios'
 import "swiper/css/swiper.css";
 import { Swiper, SwiperSlide } from 'vue-awesome-swiper'
+const API_URL = 'http://127.0.0.1:8000'
 
 export default {
   name: 'UserView',
   components: {
-    MovieList, 
+    MovieList4, 
     Swiper,
     SwiperSlide,
-    // UserModify
   },
   data() {
     return {
+      backgroundUrl : null,
+      likeMovies: null,
       menu : [
       {
         name: "정보수정",
@@ -95,33 +101,15 @@ export default {
     isLogin() {
       return this.$store.getters.isLogin
     },
-    movies() {
-      return this.$store.state.movies
-    },
   },
   created() {
-    const API_KEY = process.env.VUE_APP_TMDB_API_KEY
-    const URL = 'https://api.themoviedb.org/3/movie/popular'
-
-    axios({
-      method: "get",
-      url: URL,
-      params: {
-        api_key: API_KEY,
-        language: 'ko-KR',
-        page: '1',
-      }
-    })
-      .then((response) => {
-          this.$store.dispatch('getMovies', response.data.results)
-      })
-      .catch((error) => {
-        console.log(error)
-      })
+    this.getbackground()
+    this.getLikeList()
     },
   methods: {
     openSetting() {
-      this.$router.push({ name: 'UserModify'})
+      // this.$router.push({ name: 'UserModify'})
+      this.$store.commit('ON_MODIFY')
     },
     fileChange: function(e) {
       console.log(e.target.files)
@@ -135,16 +123,33 @@ export default {
         this.$router.push({ name: 'LogInView'})
       }
     },
+    getbackground() {
+      const backgroundNum = _.range(1, 9) 
+      const selectedBack = _.sample(backgroundNum)
+      const backgroundUrl = `@/assets/backgroundimage/background${selectedBack}.jpg`
+      // this.$refs.bgstyle.style.backgroundImage = `url('${backgroundUrl}')`
+      this.backgroundUrl = backgroundUrl
+
+      // this.backgroundUrl = backgroundUrl
+      // console.log('!!!!!!!!drl', this.backgroundUrl)
+    },
+    getLikeList() {
+      axios({
+        method: 'get',
+        url: `${API_URL}/accounts/${this.$store.state.userid}/list/`,
+        headers: {
+          Authorization: `Token ${this.$store.state.token}`
+        }
+      })
+        .then((res) => {
+          // console.log('!!!!!!!likelist', res.data)
+          this.likeMovies = res.data.like_movies
+        })
+        .catch((err) => {
+          console.log(err)
+        })
+    }
   },
-  // created() {
-  //   const URL = 
-  //   axios({
-  //     method: "get",
-  //     url:
-  //   })
-  //     .then(response => this.user = response.data)
-  //     .catch(error => console.log(error))
-  // }
 }
 </script>
 
@@ -179,7 +184,7 @@ export default {
     margin: 28px 0px 30px;
   }
   .uvthird {
-    max-width: 800px;
+    max-width: 1100px;
     margin: 0px auto;
   }
   .uvfourth {
@@ -224,19 +229,19 @@ export default {
     line-height: 30px;
     width: 100%;
   }
-  .movie_first {
+  .movie_first_user {
     margin-bottom: 20px;
     /* font-family:  */
   }
-  .movie_second {
+  .movie_second_user {
     max-width: 1320px;
   }
-  .movie_third {
+  .movie_third_user {
     position: relative;
     margin-right: 20px;
     margin-left: 15px;
   }
-  .movie_list {
+  .movie_list_user {
     list-style: none;
     padding: 0;
     white-space: nowrap;
@@ -244,7 +249,7 @@ export default {
     margin-left: -4px !important;
     margin: 0;
   }
-  .movie_subject {
+  .movie_subject_user {
     line-height: 29px;
     max-height: 58px;
     padding: 4px 20px 9px 0;
@@ -253,7 +258,11 @@ export default {
     margin-right: 15px;
     margin-left: 15px;
   }
-  .movie_subject_name {
+  .movie_subject_name_user {
+    font-weight: 700;
+    letter-spacing: -0.4px;
+    line-height: 30px;
+    color: #292a32;
     display: -webkit-box;
     white-space: normal;
     overflow: hidden;

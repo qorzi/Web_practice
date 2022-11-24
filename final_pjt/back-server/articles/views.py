@@ -6,7 +6,7 @@ from rest_framework.decorators import api_view
 
 # permission Decorators
 from rest_framework.decorators import permission_classes
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 
 from rest_framework import status
 from django.shortcuts import get_object_or_404, get_list_or_404, redirect
@@ -18,7 +18,7 @@ from django.http import JsonResponse
 
 
 @api_view(['GET', 'POST'])
-@permission_classes([IsAuthenticated])
+@permission_classes([IsAuthenticatedOrReadOnly])
 def article_list(request):
     if request.method == 'GET':
         # articles = Article.objects.all()
@@ -35,6 +35,7 @@ def article_list(request):
 
 
 @api_view(['GET', 'DELETE', 'PUT'])
+@permission_classes([IsAuthenticated])
 def article_detail(request, article_pk):
     # article = Article.objects.get(pk=article_pk)
     article = get_object_or_404(Article, pk=article_pk)
@@ -65,6 +66,7 @@ def comment_list(request):
 
 
 @api_view(['GET', 'DELETE', 'PUT'])
+@permission_classes([IsAuthenticated]) # 인증된 사용자만 권한 허용
 def comment_detail(request, comment_pk):
     # comment = Comment.objects.get(pk=comment_pk)
     comment = get_object_or_404(Comment, pk=comment_pk)
@@ -98,17 +100,21 @@ def comment_create(request, article_pk):
 
 # 게시글 좋아요 등록 및 해제
 @api_view(['POST'])
-@permission_classes([IsAuthenticated]) # 인증된 사용자만 권한 허용
+# @permission_classes([IsAuthenticated]) # 인증된 사용자만 권한 허용
 def article_like(request, article_pk):
     article = get_object_or_404(Article, pk=article_pk)
     user = request.user
     # 해제
     if article.like_article_users.filter(pk=user.pk).exists():
         article.like_article_users.remove(user)
+        serializer = ArticleLikeSerializer(article)
+        return Response(serializer.data)
     # 등록
     else:
         article.like_article_users.add(user)
-        
+        serializer = ArticleLikeSerializer(article)
+        return Response(serializer.data)
+    
     serializer = ArticleLikeSerializer(article)
     
     like_status = {

@@ -4,9 +4,9 @@
       <h2 class="header-box_text">영화관 찾기</h2>
     </div>
     <hr class="hr">
-    <div class="s-btn">
+    <!-- <div class="s-btn">
       <button class="s-btn_c" @click="search">여기를 눌러서 영화관 가져와라</button>
-    </div>
+    </div> -->
     <div class="map">
       <div class="map_box">
         <div id="map"></div>
@@ -43,12 +43,12 @@ export default {
       // ]
 
       // 영화관 서치 함수 실행 위치
-      // this.searchPlaces('영화관')
+      this.searchPlaces('영화관')
 
       // dragend 이벤트가 일어났을 때, 새로 검색하기
-      // kakao.maps.event.addListener(this.map, 'dragend', () => {
-      //   this.searchPlaces('영화관')
-      // })
+      kakao.maps.event.addListener(this.map, 'dragend', () => {
+        this.searchPlaces('영화관')
+      })
     },
     displayMarkers(positions) {
       // 1. 현재 표시되어있는 marker들이 있다면 marker에 등록된 map을 없애준다.

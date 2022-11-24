@@ -67,6 +67,13 @@ def user_movie_list(request, user_pk):
     }
     return JsonResponse(user_list)
 
+# 상대방 프로필 조회
+@api_view(['GET'])
+@permission_classes([IsAuthenticated]) # 인증된 사용자만 권한 허용
+def user_profile(request, user_pk):
+    user = get_object_or_404(User, pk=user_pk)
+    serializer = UserProfileSerializer(user)
+    return Response(serializer.data)
 
 # # Kakao Login
 # @api_view(['POST'])

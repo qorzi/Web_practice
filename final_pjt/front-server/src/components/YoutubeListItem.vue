@@ -47,11 +47,15 @@ export default {
 </script>
 
 <style>
-  .youtube-list .youtube-list-item:focus,
+  /* .youtube-list .youtube-list-item:focus,
   .youtube-list .youtube-list-item:hover {
   transform: scale(1.4);
   z-index: 1;
-}
+} */
+
+  /* .youtube-list .youtube-list-item {
+    transform: scale(1.4)
+  } */
   .youtube-list:focus-within ~ .youtube-list-item,
   .youtube-list:hover ~ .youtube-list-item {
   transform: translateX(-15%);
@@ -91,11 +95,25 @@ export default {
 }
 
   .youtube-container > iframe {
-  position: absolute;
-  top: 25%;
+  /* position: absolute; */
+  /* top: 25%;
   left: 25%;
   width: 50%;
-  height: 50%;
+  height: 50%; */
 }
 
+iframe {
+  overflow-x: hidden;
+  overflow: auto;
+  width: 460px;
+  height: 280px;
+}
+@media screen and (max-width: 1200px) {
+    iframe {
+  overflow-x: hidden;
+  overflow: auto;
+  width: 100%;
+  height: 100%;
+}
+  }
 </style>

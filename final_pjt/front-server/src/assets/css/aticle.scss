@@ -29,7 +29,7 @@
 
 .header-box {
   height: 50px;
-  border: 1px solid rgba(197, 197, 197, 0.699);
+  border: 1px solid $gray-border;
   &_text {
     margin-top: 10px;
     padding-left: 10px;
@@ -48,15 +48,15 @@
   border-top: 1px solid;
   border-left: 1px solid;
   border-right: 1px solid;
-  border-color: rgba(197, 197, 197, 0.699);
+  border-color: $gray-border;
   padding: 10px;
   
   &:nth-last-child(1) {
-    border-bottom: 1px solid rgba(197, 197, 197, 0.699);
+    border-bottom: 1px solid $gray-border;
   }
   
   &:hover {
-    background-color: $gray-basic;
+    background-color: $gray-back;
     cursor: pointer;
     
   }
@@ -71,7 +71,7 @@
   }
   
   &_content {
-    color: rgb(75, 75, 75);
+    color: $gray-txet-hard;
     font-size: 11px;
     margin-left: 5px;
 
@@ -79,7 +79,7 @@
 
   &_time {
     display: inline;
-    color: rgb(75, 75, 75);
+    color: $gray-txet-hard;
     font-size: 9px;
     margin-left: 5px;
   }
@@ -101,7 +101,7 @@
 .thumb {
   font-size: 12px;
   font-weight: 800;
-  color: rgb(231, 58, 58);
+  color: $like-red;
   padding: 2px 2px;
 
 }
@@ -112,7 +112,7 @@
 .chat {
   font-size: 12px;
   font-weight: 800;
-  color: rgb(3, 221, 148);
+  color: $chat-green;
   padding: 2px 2px;
 }
 
@@ -124,7 +124,7 @@
 
 .detail-box {
   height: auto;
-  border: 1px solid rgba(197, 197, 197, 0.699);
+  border: 1px solid $gray-border;
   
   &_pro {
     margin: 10px;
@@ -149,7 +149,7 @@
   }
   &_time {
     font-size: 12px;
-    color: rgb(167, 167, 167);
+    color: $gray-txet;
   }
   &_text {
     margin-top: 10px;
@@ -170,7 +170,7 @@
 }
 
 .btn-d {
-  color: rgb(231, 58, 58);
+  color: $like-red;
   margin: 5px;
   font-size: 14px;
   font-weight: bold;
@@ -178,7 +178,7 @@
   margin-left: 0px;
 
   &_icon {
-    color: rgb(231, 58, 58);
+    color: $like-red;
     margin: 5px;
     font-size: 17px;
     font-weight: 600;
@@ -187,7 +187,7 @@
   }
 
   &_box {
-    border: 1px solid rgb(231, 58, 58);
+    border: 1px solid $like-red;
     border-radius: 3px;
     width: 65px;
     margin: 3px;
@@ -337,7 +337,7 @@
   display: flex;
   align-items: center;
   height: 40px;
-  border: 1px solid rgba(197, 197, 197, 0.699);
+  border: 1px solid $gray-border;
   border-top: 0;
   &_text {
     margin-top: 10px;
@@ -379,7 +379,7 @@
 
 .comment-content-box {
   width: 100;
-  border: 1px solid rgba(197, 197, 197, 0.699);
+  border: 1px solid $gray-border;
   border-top: 0;
 }
 
@@ -394,7 +394,7 @@
 
   &_time {
     font-size: 12px;
-    color: rgb(167, 167, 167);
+    color: $gray-txet;
   }
 }
 

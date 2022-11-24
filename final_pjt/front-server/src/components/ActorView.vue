@@ -1,8 +1,10 @@
 <template>
 
   <a class="actor-box" :href="`https://www.themoviedb.org/person/${this.actor?.id}?language=ko`">
-    <img :src="actorImgUrl" alt="">
-    <p>{{actor?.name}}</p>
+    <div>
+      <img :src="actorImgUrl" alt="">
+      <p>{{actor?.name}}</p>
+    </div>
   </a>
 </template>
 

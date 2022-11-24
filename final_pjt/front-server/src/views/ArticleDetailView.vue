@@ -79,8 +79,10 @@ export default {
     likeMine() {
       let mylike = false
       const likeUsers = this.article.like_article_users
-      console.log(likeUsers)
-      if (likeUsers.includes(this.article.user)) {
+      // console.log(likeUsers)
+      const currentUser = this.$store.state.userid
+      console.log('11111',currentUser)
+      if (likeUsers.includes(this.$store.state.userid)) {
         mylike = true
       }
       console.log(mylike)
@@ -99,7 +101,7 @@ export default {
         }
       })
         .then((res) => {
-          console.log('!!!!', res.data)
+          // console.log('!!!!', res.data)
           this.article = res.data
           this.like_cnt = this.article.like_article_users.length
           this.comment_cnt = this.article.comment_count

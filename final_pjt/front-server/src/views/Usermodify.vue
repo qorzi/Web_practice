@@ -1,9 +1,11 @@
 <template>
   <div class="settingbox">
     <header class="settingname">
+      
       <div class="settingname_1"></div>
       <div class="settingname_2"></div>
       <div class="settingname_3">설정</div>
+      <h1>회원정보 변경</h1>
     </header>
     <div class="settingcontext">
       <div class="settingcontext_1">
@@ -73,7 +75,7 @@ export default {
     position: relative;
     vertical-align: middle;
     text-align: left;
-    width: 375px;
+    /* width: 375px; */
     height: auto;
     min-height: 540px;
     border-radius: 6px;
@@ -90,12 +92,15 @@ export default {
     line-height: 22px;
     width: 100%;
     padding: 0px 16px;
-    border-bottom: 1px solid rgb(227, 227, 227);
+    /* border-bottom: 1px solid rgb(227, 227, 227); */
     position: absolute;
     top: 0px;
     text-align: left;
     height: auto;
   }
+  h1 {
+    text-align: center;
+    }
   .settingcontext {
     height: auto;
     overflow: auto;

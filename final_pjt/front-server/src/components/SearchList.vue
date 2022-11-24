@@ -76,12 +76,12 @@ export default {
         },
         breakpoints: {
           '@0.75': {
-            slidesPerView: 5,
-            slidesPerGroup: 5,
+            slidesPerView: 4,
+            slidesPerGroup: 4,
           },
           '@1.20': {
-            slidesPerView: 6,
-            slidesPerGroup: 6,
+            slidesPerView: 5,
+            slidesPerGroup: 5,
           }
         },
       },

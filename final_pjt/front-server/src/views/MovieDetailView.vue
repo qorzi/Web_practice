@@ -35,11 +35,11 @@
     <!-- <p>{{detailMovie}}</p> -->
     <div>
       <div class="movie-youtube-area">
-        관련 영상
+        <p class="youtuve">관련 영상</p>
         <div>
-        <YoutubeList :title="detailMovie.title"/>
+        <YoutubeList :title="movieTitle"/>
         </div>
-        <hr>
+        <hr class="detail-hr">
       </div>
     </div>
   </div>
@@ -60,6 +60,7 @@ export default {
     return {
       detailMovie: null,
       actors: null,
+      movieTitle: null,
     }
   },
   created() {
@@ -115,6 +116,7 @@ export default {
         // console.log(res.data)
         const detailMovie = res.data
         this.detailMovie = detailMovie
+        this.movieTitle = detailMovie.title
       })
     },
     getActors() {

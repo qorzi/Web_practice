@@ -10,7 +10,7 @@ Vue.use(Vuex)
 
 const API_URL = 'http://127.0.0.1:8000'
 const YOUTUBE_URL = 'https://www.googleapis.com/youtube/v3/search'
-const YOUTUBE_KEY = process.env.VUE_APP_YOUTUBE_API
+const YOUTUBE_KEY = process.env.VUE_APP_YOUTUBE_KEY
 
 export default new Vuex.Store({
   plugins: [
@@ -32,6 +32,10 @@ export default new Vuex.Store({
     genreMovies: [],
     badwordFilter: false,
     username: null,
+    userid: null,
+    nickname: null,
+    isDarkMode: false,
+    onModify: false,
   },
   
   getters: {
@@ -59,7 +63,7 @@ export default new Vuex.Store({
       state.isModalLogin = false
       state.token = token
       // router.push({ name: 'Testhome'})
-      // this.dispatch('getUserPro')
+      this.dispatch('getUserPro')
       
     },
     DELETE_TOKEN(state) {
@@ -74,10 +78,12 @@ export default new Vuex.Store({
     OPEN_LOGIN(state) {
       state.isModalLogin = true
       state.notSign = true
+      state.onModify = false
     },
     OPEN_SIGNUP(state) {
       state.isModalLogin = true
       state.notSign = false
+      state.onModify = false
     },
     OPEN_SEARCH(state, searchedMovies) {
       state.searchMovies = searchedMovies
@@ -92,14 +98,22 @@ export default new Vuex.Store({
       // console.log(state.positionObj)
     },
     SEARCH_YOUTUBE: function (state, res) {
-      state.youtubeVideos = res.data.items
+      state.youtubeVideos = res.data.items.slice(0,3)
     },
     GET_GENRE_MOVIE(state, movies) {
       state.genreMovies = movies
     },
     BADWORD_FILTER(state) {
       state.badwordFilter = !state.badwordFilter
+    },
+    TOGGLE_THEME(state) {
+      state.isDarkMode = !state.isDarkMode
+    },
+    ON_MODIFY(state) {
+      state.isModalLogin = true
+      state.onModify = true
     }
+  
   },
   actions: {
     getMovies(context, movies) {
@@ -121,7 +135,7 @@ export default new Vuex.Store({
       })
         .then((res) => {
           // console.log(res, context)
-          // console.log(res.data)
+          console.log('!!!!!!',res.data)
           context.commit('GET_ARTICLES', res.data)
         })
         .catch((err) => {
@@ -160,7 +174,7 @@ export default new Vuex.Store({
         }
       })
         .then((res) => {
-          console.log(res)
+          // console.log(res)
           context.state.username = username 
           context.commit('SAVE_TOKEN', res.data.key)
         })
@@ -175,25 +189,12 @@ export default new Vuex.Store({
       })
         .then((res) => {
           // console.log(res, context)
-          console.log(res.data)
+          // console.log('!!!!!!',res.data)
+          context.state.userid = res.data.id
+          context.state.username = res.data.username
+          context.state.nickname = res.data.nickname
+          // console.log('!!!!!!', context.state.userid)
           
-        })
-        .catch((err) => {
-          console.log(err)
-        })
-    },
-    getUser(context) {
-      axios({
-        method: 'get',
-        url: `${API_URL}/api/v1/articles/`,
-        headers: {
-          Authorization: `Token ${context.state.token}`
-        }
-      })
-        .then((res) => {
-          // console.log(res, context)
-          // console.log(res.data)
-          context.commit('GET_ARTICLES', res.data)
         })
         .catch((err) => {
           console.log(err)
@@ -214,7 +215,7 @@ export default new Vuex.Store({
         }
       })
         .then((res) => {
-          // console.log(res.data.results)
+          // console.log('!!!!!', res.data.results)
           context.state.searchText = searchText
           const searchedMovies = res.data.results
           context.commit("OPEN_SEARCH", searchedMovies)
@@ -241,11 +242,15 @@ export default new Vuex.Store({
           params,
         })
         .then(res => {
-          // console.log(res.data.items)
+          console.log('!!!!!', res.data.items.slice(0,3))
           commit('SEARCH_YOUTUBE', res)
         })
         .catch(err => console.log(err))
-      },  
+      },
+      toggleTheme(context) {
+        context.commit('TOGGLE_THEME')
+        document.documentElement.classList.toggle("dark")
+      },
       // articleLike(context, articles) {
       //   axios({
       //     method: 'post',
@@ -254,7 +259,23 @@ export default new Vuex.Store({
       //       Authorization: `Token ${context.state.token}`
       //     }
       //   })
-      // }
+      // },
+      likeMovie(context, movie_id) {
+        axios({
+          method: 'post',
+          url: `${API_URL}/movies/${movie_id}/like/`,
+          headers: {
+            Authorization: `Token ${context.state.token}`
+          }
+        })
+          .then((res) => {
+            console.log(res)
+            
+          })
+          .catch((err) => {
+            console.log(err)
+          })
+      }
     },
   modules: {
   }

@@ -40,7 +40,7 @@ class ProfileSerializer(UserDetailsSerializer):
     class Meta:
         model = User
         # 이 부분에 정의되는 부분만 수정 가능('followings' : 팔로워)
-        fields = ('id', 'username', 'profile', 'nickname',)
+        fields = ('id', 'username', 'nickname',)
 
 # 사용자가 좋아요/위시리스트/평점을 준 영화 목록 조회
 class UserMovieListSerializer(serializers.ModelSerializer):
@@ -59,3 +59,18 @@ class UserMovieListSerializer(serializers.ModelSerializer):
         model = User
         # 사용자 id, 평가한 영화 목록, 좋아요한 영화 목록, 위시리스트에 담은 영화 목록
         fields = ('id', 'like_movies',)
+
+
+# 상대방 프로필 조회 
+class UserProfileSerializer(UserDetailsSerializer):
+
+    class GerneSerializer(serializers.ModelSerializer):
+        class Meta:
+            model = Genre
+            fields = ('id', 'name',)
+            
+    hate_genres = GerneSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = User
+        fields = ('id', 'username', 'nickname',)

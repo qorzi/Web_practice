@@ -1,50 +1,58 @@
 <template>
   <li class="movie_card">
-    <a href="">
-      <div class ="movie_border" @click="goMovieDetail"> 
+    <span>
+      <div class ="movie_border"> 
         <div class="movie_img">
-          <a class ="moviegood"> ♥</a>
-          <img :src="getTrend" :alt="movie2.title" class= "movie">  
+          <span v-if="!isLike"  @click="likeMovie" class ="moviegood"> ♥</span>
+          <span v-else @click="likeMovie" class ="moviegood2"> ♥</span>
+          <span class ="number_cnt"> {{index+1}}</span>
+          <img @click="goMovieDetail" :src="getImage" :alt="movie.title" class= "movie">  
         </div>
       </div>
       <div class="context">
-        <div class = "movie_title">{{ movie2.title }}</div>
-        <div class= "context_detail">{{createdYear}} 평균 ★{{movie2.vote_average.toFixed(1)}}</div>
+        <div class = "movie_title">{{ movie.title }}</div>
+        <div class= "context_detail">{{createdYear}} 평균 ★{{movie.vote_average.toFixed(1) }}</div>
         <div class= "context_detail">{{genres.join(' ')}}</div>
       </div>
-    </a>
+    </span>
   </li>
 </template>
 
 <script>
+import axios from 'axios'
+
+const API_URL = 'http://127.0.0.1:8000'
+
 export default {
-  name: 'MovieList2',
+  name: 'MovieList',
   props: {
-    movie2: Object,
+    movie: Object,
+    index: Number,
   },
   data() {
     return {
+      isLike: false,
       genres: null,
       genre: {28: "액션", 12: "모험", 16: "애니메이션", 35: "코미디", 80: "범죄", 99: "다큐멘터리", 18: "드라마", 10751: "가족", 14: "판타지", 36: "역사", 27: "공포", 10402: "음악", 9648: "미스터리", 10749: "로맨스", 878: "SF", 10770: "TV 영화", 53: "스릴러", 10752: "전쟁", 37: "서부"}
     }
   },
   created() {
     this.convertGenre()
+    this.isLikeMovie()
   },
   computed: {
-    getTrend() {
-      return `https://image.tmdb.org/t/p/original/${this.movie2.poster_path}`
+    getImage() {
+      return `https://image.tmdb.org/t/p/original/${this.movie.poster_path}`
     },
     createdYear() {
-      let release_date = this.movie2.release_date
+      let release_date = this.movie.release_date
       release_date = release_date.substr(0, 4)
       return release_date
     },
-
   },
   methods: {
     convertGenre() {
-      const moviegenre_nums = this.movie2.genre_ids
+      const moviegenre_nums = this.movie.genre_ids
       const genres = moviegenre_nums.reduce((acc, genre_num) => {
         acc.push(this.genre[genre_num])
           return acc
@@ -52,20 +60,61 @@ export default {
       this.genres = genres
     },
     goMovieDetail() {
-        this.$router.push({ name: 'MovieDetailView', params: { id: this.movie2.id } })
+      this.$router.push({ name: 'MovieDetailView', params: { id: this.movie.id } })
+    },
+    likeMovie() {
+      this.$store.dispatch('likeMovie', this.movie.id)
+      this.isLikeMovie()
+    },
+    isLikeMovie() {
+      axios({
+        method: 'get',
+        url: `${API_URL}/movies/${this.movie.id}/exist/`,
+        headers: {
+          Authorization: `Token ${this.$store.state.token}`
+        }
+      })
+        .then((res) => {
+          // console.log('!!!!!!!', res.data)
+          if (res.data === 1) {
+            this.isLike = true
+          } else {
+            this.isLike = false
+          }
+        })
+        .catch((err) => {
+          console.log(err)
+        })
     },
   }
 }
-
 </script>
 
 <style>
   .movie {
+    border-radius: 5px;
     vertical-align: top;
     width: 100%;
     height: 100%;
     opacity: 1;
     object-fit: cover;
+    
+  }
+  .number_cnt {
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    background-color: rgba(0, 0, 0, 0.77);
+    color: rgb(255, 255, 255);
+    font-weight: 700;
+    letter-spacing: normal;
+    font-size: 14px;
+    line-height: 22px;
+    text-align: center;
+    width: 24px;
+    height: 24px;
+    border-radius: 4px;
+    opacity: 1;
   }
   .movie_img {
     position: absolute;
@@ -73,15 +122,15 @@ export default {
     left: 0;
     box-sizing: border-box;
     height: 100%;
-    border: 1px solid #eae9e8;
-    border-radius: 5px;
-    background: #f8f8f8;
+  }
+  .movie_img:hover {
+    cursor: pointer;
   }
   .movie_border {
     position: relative;
     width: 100%;
     height: 0;
-    padding-bottom: 145.37037037037038%;
+    padding-bottom: 143%;
   }
   .movie_title {
     display: -webkit-box;
@@ -130,10 +179,26 @@ export default {
     border-radius: 4px;
     opacity: 1;
   }
+  .moviegood2 {
+    position: absolute;
+    bottom: 3px;
+    left: 3px;
+    background-color: rgba(0, 0, 0, 0.77);
+    color: rgb(255, 50, 50);
+    font-weight: 700;
+    letter-spacing: normal;
+    font-size: 14px;
+    line-height: 22px;
+    text-align: center;
+    width: 24px;
+    height: 24px;
+    border-radius: 4px;
+    opacity: 1;
+  }
   .movie_card {
     /* width: 33.333333333333336%; */
     margin-bottom: 0px;
-    padding: 0 4px !important;
+    padding: 0 5px !important;
     /* display: inline-block; */
     /* vertical-align: top; */
     box-sizing: border-box;

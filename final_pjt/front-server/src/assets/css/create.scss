@@ -3,7 +3,7 @@
   display: flex;
   align-items: center;
   height: 100;
-  border: 1px solid rgba(197, 197, 197, 0.699);
+  border: 1px solid $gray-border;
   border-top: 0;
   &_text {
     margin-top: 10px;

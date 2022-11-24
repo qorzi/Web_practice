@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <section class="movieviewborder">
     <div class="moive_first">
       <div class= "movie_subject">
         <p class= "movie_subject_name">박스오피스 순위</p>
@@ -9,9 +9,12 @@
           <ul class="movie_list">
             <swiper :options="swiperOption">
               <swiper-slide
-                v-for="movie in movies" 
+                v-for="(movie, index) in movies" 
                 :key="movie.id">
-                <MovieList :movie="movie"/>
+                <MovieList 
+                  :movie="movie"
+                  :index="index"
+                />
               </swiper-slide>
             </swiper>
           </ul>
@@ -27,9 +30,12 @@
           <ul class="movie_list">
             <swiper :options="swiperOption">
               <swiper-slide
-                v-for="movie2 in movies2" 
-                :key="movie2.id">
-                <MovieList2 :movie2="movie2"/>
+                v-for="(movie, index) in movies2" 
+                :key="movie.id">
+                <MovieList2 
+                :movie="movie"
+                :index="index"
+                />
               </swiper-slide>
             </swiper>
           </ul>
@@ -45,16 +51,20 @@
           <ul class="movie_list">
             <swiper :options="swiperOption">
               <swiper-slide
-                v-for="movie3 in genreMovies" 
-                :key="movie3.id">
-                <MovieList3 :movie3="movie3"/>
+                v-for="(movie3, index) in genreMovies" 
+                :key="movie3.id"
+                >
+                <MovieList3 
+                :movie3="movie3"
+                :index="index"
+                />
               </swiper-slide>
             </swiper>
           </ul>
         </div>
       </div> 
     </div>
-  </div>
+  </section>
 </template>
 
 <script>
@@ -83,12 +93,12 @@ export default {
           },
           breakpoints: {
           '@0.75': {
-            slidesPerView: 5,
-            slidesPerGroup: 5,
+            slidesPerView: 4,
+            slidesPerGroup: 4,
           },
           '@1.20': {
-            slidesPerView: 6,
-            slidesPerGroup: 6,
+            slidesPerView: 5,
+            slidesPerGroup: 5,
           }
         },
       }
@@ -172,19 +182,23 @@ export default {
 </script>
 
 <style>
+  .movieviewborder {
+    margin-top: 80px;
+    min-height: calc(100vh - 343px);
+  }
   .movie_first {
     margin-bottom: 20px;
     /* font-family:  */
   }
   .movie_second {
-    max-width: 1320px;
-    margin-right: auto;
-    margin-left: auto;
+    max-width: 1300px;
+    margin-right: 16%;
+    margin-left: 16%;
   }
   .movie_third {
     position: relative;
     margin-right: 20px;
-    margin-left: 15px;
+    margin-left: 17px;
   }
   .movie_list {
     list-style: none;
@@ -195,11 +209,10 @@ export default {
     margin: 0;
   }
   .movie_subject {
-    margin-right: auto;
-    margin-left: auto;
-    margin: 0 60px;
+    margin-left: 17% !important;
+    /* margin-right: % !important; */
     white-space: nowrap;
-    max-width: 1320px;
+    max-width: 1320px ;
     padding: 12px 0 14px;
     max-height: 60px;
     line-height: 30px;
@@ -212,6 +225,6 @@ export default {
     font-weight: 700;
     letter-spacing: -0.4px;
     line-height: 30px;
-    margin: 0px;
+    
   }
 </style>
